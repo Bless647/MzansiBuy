@@ -27,7 +27,7 @@ if(grid){
 
 // ADMIN
 window.login=()=>{
-  if(document.getElementById("adminPass").value==="1234"){
+  if(document.getElementById("adminPass").value==="Entrepreneurs4"){
     document.querySelector(".admin-box").classList.add("hidden");
     document.querySelector(".admin-panel").classList.remove("hidden");
     loadAdminProducts();
