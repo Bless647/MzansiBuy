@@ -10,6 +10,7 @@
 <div class="admin-container">
   <h1>Admin Panel</h1>
 
+  <!-- Login -->
   <div id="loginDiv">
     <label>Password:</label>
     <input type="password" id="adminPasswordInput" placeholder="Enter password">
@@ -17,20 +18,21 @@
     <p id="loginError" class="error"></p>
   </div>
 
+  <!-- Control Panel -->
   <div id="controlPanel" style="display:none;">
     <h2>Product Management</h2>
     <label>Product Name:</label>
-    <input type="text" id="productNameInput">
-    <label>Price:</label>
-    <input type="number" id="productPriceInput">
-    <label>Description:</label>
-    <input type="text" id="productDescInput">
-    <label>Image URL:</label>
-    <input type="text" id="productImageInput">
+    <input type="text" id="productName" placeholder="Name">
+    <label>Product Price:</label>
+    <input type="number" id="productPrice" placeholder="Price">
+    <label>Product Description:</label>
+    <textarea id="productDesc" placeholder="Description"></textarea>
+    <label>Product Image URL:</label>
+    <input type="text" id="productImg" placeholder="Image URL">
     <button id="addProductBtn">Add Product</button>
 
-    <h3>Existing Products</h3>
-    <div id="adminProductsList"></div>
+    <h3>Products List</h3>
+    <div id="adminProductsList" class="grid"></div>
   </div>
 </div>
 
