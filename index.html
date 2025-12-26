@@ -3,21 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>MzansiBuy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+  <h1>MzansiBuy Products</h1>
+  <div id="productsGrid" class="grid"></div>
 
-<header class="top">
-  <h1>MzansiBuy</h1>
-  <a href="admin.html" class="admin-icon">
-    <i class="fa-solid fa-user-gear"></i>
-  </a>
-</header>
+  <script src="app.js"></script>
+  <script>
+    async function loadProductsIndex() {
+      const grid = document.getElementById("productsGrid");
+      grid.innerHTML = "";
 
-<main id="products" class="grid"></main>
+      const querySnapshot = await getDocs(collection(db, "products"));
+      querySnapshot.forEach((docSnap) => {
+        const p = docSnap.data();
+        grid.innerHTML += `
+          <div class="product-card">
+            <img src="${p.imageURL}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <p>R ${p.price}</p>
+          </div>
+        `;
+      });
+    }
 
-<script type="module" src="app.js"></script>
+    loadProductsIndex();
+  </script>
 </body>
 </html>
