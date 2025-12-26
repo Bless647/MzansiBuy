@@ -3,32 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <title>MzansiBuy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <h1>MzansiBuy Products</h1>
-  <div id="productsGrid" class="grid"></div>
 
-  <script src="app.js"></script>
-  <script>
-    async function loadProductsIndex() {
-      const grid = document.getElementById("productsGrid");
-      grid.innerHTML = "";
+<header class="top">
+  <h1>MzansiBuy</h1>
+  <a href="admin-products.html" class="admin-icon">
+    <i class="fa-solid fa-user-gear"></i>
+  </a>
+</header>
 
-      const querySnapshot = await getDocs(collection(db, "products"));
-      querySnapshot.forEach((docSnap) => {
-        const p = docSnap.data();
-        grid.innerHTML += `
-          <div class="product-card">
-            <img src="${p.imageURL}" alt="${p.name}">
-            <h3>${p.name}</h3>
-            <p>R ${p.price}</p>
-          </div>
-        `;
-      });
-    }
+<main id="products" class="grid"></main>
 
-    loadProductsIndex();
-  </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAFRoLLaeGoaPQHwTgt_frBDG90PQ03vZU",
+    authDomain: "mzansibuy-da2ec.firebaseapp.com",
+    projectId: "mzansibuy-da2ec",
+    storageBucket: "mzansibuy-da2ec.appspot.com",
+    messagingSenderId: "960056695104",
+    appId: "1:960056695104:web:0aaaf222abaf0ceebe42a5",
+    measurementId: "G-BZLD0M13GH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const productsContainer = document.getElementById("products");
+
+  async function loadProducts() {
+    productsContainer.innerHTML = ""; // clear container
+    const querySnapshot = await getDocs(collection(db, "products"));
+    querySnapshot.forEach((docSnap) => {
+      const p = docSnap.data();
+      const card = document.createElement("div");
+      card.classList.add("product-card");
+
+      card.innerHTML = `
+        <img src="${p.imageURL}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>R ${p.price}</p>
+      `;
+
+      // Optional: click to show details later
+      // card.addEventListener("click", () => showProductDetails(p));
+
+      productsContainer.appendChild(card);
+    });
+  }
+
+  loadProducts();
+</script>
+
 </body>
 </html>
