@@ -13,21 +13,36 @@
   <h2>Admin Login</h2>
 
   <form id="adminLoginForm">
-    <input type="password" id="adminPassword" placeholder="Admin password" required>
+    <input 
+      type="password" 
+      id="adminPassword" 
+      placeholder="Admin password" 
+      required
+    >
     <button type="submit">Login</button>
     <p id="error"></p>
   </form>
 
+  <!-- ADMIN PANEL -->
   <div id="adminPanel" class="hidden">
+
     <h3>Add Product</h3>
 
     <input id="pName" placeholder="Product name">
-    <input id="pPrice" placeholder="Price">
-    <input id="pImage" placeholder="Image URL">
-    <button id="addProduct">Add</button>
+    <input id="pPrice" placeholder="Price (R)">
+    
+    <!-- IMAGE UPLOAD (NO URL) -->
+    <input 
+      id="pImage" 
+      type="file" 
+      accept="image/*"
+    >
+
+    <button id="addProduct">Add Product</button>
 
     <h3>Products</h3>
     <div id="adminProducts"></div>
+
   </div>
 
 </div>
