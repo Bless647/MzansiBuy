@@ -6,16 +6,19 @@
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
+  <!-- Admin Login -->
   <div class="admin-box">
     <h2>Admin Login</h2>
     <input type="password" id="adminPass" placeholder="Enter password">
     <button onclick="login()">Login</button>
   </div>
 
+  <!-- Admin Panel -->
   <div class="admin-panel hidden">
     <h2>Admin Panel</h2>
     <button onclick="window.location='index.html'">🏠 Back to Home</button>
 
+    <!-- Add Product Form -->
     <div class="add-product">
       <h3>Add Product</h3>
       <input type="text" id="pName" placeholder="Product name">
@@ -25,6 +28,7 @@
       <button onclick="addProduct()">Add Product</button>
     </div>
 
+    <!-- Current Products List -->
     <div id="productList">
       <h3>Current Products</h3>
       <div id="productsGrid"></div>
