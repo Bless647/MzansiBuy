@@ -1,82 +1,122 @@
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: 100,
-    description: "This is a cool product",
-    image: "https://via.placeholder.com/300"
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: 200,
-    description: "Another great product",
-    image: "https://via.placeholder.com/300"
-  }
-];
+let products = [];
+let adminPassword = "1234"; // Change to your desired password
 
+// DOM Elements
 const productsContainer = document.getElementById("products");
 const orderModal = document.getElementById("orderModal");
 const closeOrderModal = document.getElementById("closeOrderModal");
 const modalProductName = document.getElementById("modalProductName");
 const modalProductPrice = document.getElementById("modalProductPrice");
 const modalProductDesc = document.getElementById("modalProductDesc");
-const customerName = document.getElementById("customerName");
-const paymentMethod = document.getElementById("paymentMethod");
+const customerNameInput = document.getElementById("customerName");
+const paymentMethodSelect = document.getElementById("paymentMethod");
 const placeOrderBtn = document.getElementById("placeOrder");
 
-// Render products
-function renderProducts() {
-  productsContainer.innerHTML = "";
-  products.forEach(product => {
+// Admin Elements
+const adminPasswordInput = document.getElementById("adminPasswordInput");
+const adminLoginBtn = document.getElementById("adminLoginBtn");
+const loginError = document.getElementById("loginError");
+const controlPanel = document.getElementById("controlPanel");
+const addProductBtn = document.getElementById("addProductBtn");
+const productNameInput = document.getElementById("productNameInput");
+const productPriceInput = document.getElementById("productPriceInput");
+const productDescInput = document.getElementById("productDescInput");
+const productImageInput = document.getElementById("productImageInput");
+const adminProductsList = document.getElementById("adminProductsList");
+
+// Admin Login
+if(adminLoginBtn){
+  adminLoginBtn.addEventListener("click", ()=>{
+    if(adminPasswordInput.value === adminPassword){
+      loginError.textContent="";
+      controlPanel.style.display="block";
+      document.getElementById("loginDiv").style.display="none";
+      renderAdminProducts();
+    }else{
+      loginError.textContent="Incorrect Password";
+    }
+  });
+}
+
+// Add Product
+if(addProductBtn){
+  addProductBtn.addEventListener("click", ()=>{
+    const name = productNameInput.value.trim();
+    const price = Number(productPriceInput.value);
+    const desc = productDescInput.value.trim();
+    const img = productImageInput.value.trim();
+    if(name && price && img){
+      const product = {name, price, desc, img};
+      products.push(product);
+      renderAdminProducts();
+      renderProducts();
+      productNameInput.value="";
+      productPriceInput.value="";
+      productDescInput.value="";
+      productImageInput.value="";
+    }
+  });
+}
+
+// Render Admin Products
+function renderAdminProducts(){
+  adminProductsList.innerHTML="";
+  products.forEach((p,i)=>{
     const div = document.createElement("div");
-    div.className = "grid-item";
-    div.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>R${product.price}</p>
-    `;
-    div.addEventListener("click", () => {
-      openOrderModal(product);
+    div.classList.add("card");
+    div.innerHTML=`<strong>${p.name}</strong> - R${p.price}<button data-index="${i}" class="deleteBtn">Delete</button>`;
+    adminProductsList.appendChild(div);
+  });
+
+  document.querySelectorAll(".deleteBtn").forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+      const index = e.target.getAttribute("data-index");
+      products.splice(index,1);
+      renderAdminProducts();
+      renderProducts();
+    });
+  });
+}
+
+// Render Products for Index
+function renderProducts(){
+  if(!productsContainer) return;
+  productsContainer.innerHTML="";
+  products.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.classList.add("card");
+    div.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R${p.price}</p>`;
+    div.addEventListener("click",()=>{
+      modalProductName.textContent = p.name;
+      modalProductPrice.textContent = "R"+p.price;
+      modalProductDesc.textContent = p.desc;
+      orderModal.style.display="block";
     });
     productsContainer.appendChild(div);
   });
 }
 
-function openOrderModal(product) {
-  modalProductName.textContent = product.name;
-  modalProductPrice.textContent = "R" + product.price;
-  modalProductDesc.textContent = product.description;
-  orderModal.style.display = "block";
+// Close Modal
+if(closeOrderModal){
+  closeOrderModal.addEventListener("click",()=>{
+    orderModal.style.display="none";
+  });
 }
 
-closeOrderModal.addEventListener("click", () => {
-  orderModal.style.display = "none";
-});
+// Place Order Button
+if(placeOrderBtn){
+  placeOrderBtn.addEventListener("click",()=>{
+    const customerName = customerNameInput.value.trim();
+    const paymentMethod = paymentMethodSelect.value;
+    if(!customerName){
+      alert("Please enter your name");
+      return;
+    }
+    alert(`Order placed!\nName: ${customerName}\nPayment: ${paymentMethod}\nProduct: ${modalProductName.textContent}\nPrice: ${modalProductPrice.textContent}`);
+    orderModal.style.display="none";
+    customerNameInput.value="";
+  });
+}
 
-window.addEventListener("click", (e) => {
-  if (e.target === orderModal) {
-    orderModal.style.display = "none";
-  }
-});
-
-placeOrderBtn.addEventListener("click", () => {
-  if (!customerName.value) {
-    alert("Please enter your name!");
-    return;
-  }
-
-  const orderDetails = `
-  Name: ${customerName.value}
-  Product: ${modalProductName.textContent}
-  Price: ${modalProductPrice.textContent}
-  Payment: ${paymentMethod.value}
-  `;
-  console.log(orderDetails); // For now, just log. Later you can send to Firebase or server
-  alert("Order placed successfully!");
-  orderModal.style.display = "none";
-  customerName.value = "";
-  paymentMethod.value = "Cash";
-});
-
+// Initial Render
 renderProducts();
