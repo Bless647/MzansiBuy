@@ -10,26 +10,43 @@
 
 <header class="top">
   <h1>MzansiBuy</h1>
-  <a href="admin.html" class="admin-link">Admin</a>
+
+  <!-- Admin Icon -->
+  <a href="admin.html" class="icon-btn" title="Admin">
+    <!-- SVG User Gear -->
+    <svg viewBox="0 0 24 24">
+      <path d="M12 12a5 5 0 1 0-0.001-10.001A5 5 0 0 0 12 12Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"/>
+    </svg>
+  </a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<div id="orderModal" class="modal">
-  <div class="modal-content">
-    <h2 id="orderProduct"></h2>
+<!-- PRODUCT MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
 
-    <label>Name</label>
+    <!-- Back / Close -->
+    <button id="closeModal" class="icon-btn back-btn">
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <img id="modalImg" alt="">
+    <h2 id="modalName"></h2>
+    <p id="modalDesc"></p>
+    <strong id="modalPrice"></strong>
+
     <input id="customerName" placeholder="Your name">
 
-    <label>Payment</label>
     <select id="payment">
-      <option>Cash</option>
-      <option>Card</option>
+      <option value="">Payment method</option>
+      <option value="Cash">Cash</option>
+      <option value="Card">Card</option>
     </select>
 
-    <button id="confirmOrder">Place Order</button>
-    <button onclick="closeModal()">Cancel</button>
+    <button id="orderBtn" class="primary-btn">Place Order</button>
   </div>
 </div>
 
