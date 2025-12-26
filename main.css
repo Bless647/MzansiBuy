@@ -1,172 +1,115 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
-
-/* Body & Header */
 body {
-  background-color: #f5f5f5;
-  color: #111;
-  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  margin:0;
+  padding:0;
+  background-color:#f2f2f2;
 }
 
 header.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #111;
-  color: #fff;
-  padding: 15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 20px;
+  background-color:#111;
+  color:white;
 }
 
 header.top h1 {
-  font-size: 1.8rem;
+  margin:0;
+  font-size:1.8rem;
 }
 
-header.top .admin-icon i {
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: color 0.3s ease;
+.admin-icon i {
+  font-size:1.5rem;
+  color:white;
 }
 
-header.top .admin-icon i:hover {
-  color: #00aaff;
-}
-
-/* Products Grid */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  padding: 30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:20px;
 }
 
-.product-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.card {
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 4px 6px rgba(0,0,0,0.1);
+  transition:transform 0.3s, box-shadow 0.3s;
+  cursor:pointer;
 }
 
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 8px 12px rgba(0,0,0,0.2);
 }
 
-.product-card img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 10px;
+.card img {
+  max-width:100%;
+  border-radius:10px;
 }
 
-.product-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 5px;
-}
-
-.product-card p {
-  font-size: 1rem;
-  color: #333;
-}
-
-/* Modal */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-  animation: fadeIn 0.3s ease;
+  display:none;
+  position:fixed;
+  z-index:100;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
 }
 
 .modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  position: relative;
-  animation: slideIn 0.3s ease;
+  background:white;
+  margin:10% auto;
+  padding:20px;
+  width:90%;
+  max-width:400px;
+  border-radius:10px;
+  position:relative;
 }
 
-.modal-content h2 {
-  margin-bottom: 10px;
-}
-
-.modal-content p {
-  margin-bottom: 10px;
-}
-
-.modal-content input, 
-.modal-content select {
-  width: 100%;
-  padding: 8px 10px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.modal-content button {
-  background-color: #111;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  width: 100%;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.modal-content button:hover {
-  background-color: #00aaff;
-}
-
-/* Close button */
 .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.4rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: #333;
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:1.5rem;
+  cursor:pointer;
 }
 
-.close:hover {
-  color: #00aaff;
+.admin-container {
+  padding:20px;
+  max-width:600px;
+  margin:0 auto;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+.admin-container input, .admin-container select {
+  width:100%;
+  margin-bottom:10px;
+  padding:8px;
+  border-radius:5px;
+  border:1px solid #ccc;
 }
 
-@keyframes slideIn {
-  from {transform: translateY(-20px);}
-  to {transform: translateY(0);}
+button {
+  padding:10px;
+  width:100%;
+  border:none;
+  background:#007BFF;
+  color:white;
+  font-size:1rem;
+  border-radius:5px;
+  cursor:pointer;
+  transition:background 0.3s;
 }
 
-/* Responsive tweaks */
-@media (max-width: 600px) {
-  header.top {
-    flex-direction: column;
-    gap: 10px;
-  }
+button:hover {
+  background:#0056b3;
+}
 
-  .modal-content {
-    margin: 20% auto;
-    padding: 15px 20px;
-  }
+.error {
+  color:red;
 }
