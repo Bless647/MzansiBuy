@@ -5,40 +5,34 @@
   <title>MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <header class="top">
   <h1>MzansiBuy</h1>
-  <a href="admin.html" class="admin-icon">
-    <i class="fa-solid fa-user-gear"></i>
-  </a>
+  <a href="admin.html" class="admin-link">Admin</a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<!-- Order Modal -->
 <div id="orderModal" class="modal">
   <div class="modal-content">
-    <span id="closeOrderModal" class="close">&times;</span>
-    <h2 id="modalProductName"></h2>
-    <p id="modalProductPrice"></p>
-    <p id="modalProductDesc"></p>
+    <h2 id="orderProduct"></h2>
 
-    <label>Your Name:</label>
-    <input type="text" id="customerName" placeholder="Enter your name">
+    <label>Name</label>
+    <input id="customerName" placeholder="Your name">
 
-    <label>Payment Method:</label>
-    <select id="paymentMethod">
-      <option value="Cash">Cash</option>
-      <option value="Card">Card</option>
+    <label>Payment</label>
+    <select id="payment">
+      <option>Cash</option>
+      <option>Card</option>
     </select>
 
-    <button id="placeOrder">Place Order</button>
+    <button id="confirmOrder">Place Order</button>
+    <button onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
-<script type="module" src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
