@@ -1,39 +1,43 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0e0e0e;
+  background: #0d0d0d;
   color: white;
 }
 
 .top {
   display: flex;
   justify-content: space-between;
-  padding: 15px 20px;
-  background: #111;
+  padding: 20px;
+  background: #000;
 }
 
 .admin-icon {
-  color: white;
+  color: #6ecbff;
   font-size: 22px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
   gap: 20px;
   padding: 20px;
 }
 
 .card {
-  background: #1a1a1a;
+  background: #111;
+  border-radius: 14px;
   padding: 15px;
-  border-radius: 12px;
   transition: transform .3s, box-shadow .3s;
 }
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 0 20px #00ffcc55;
+  box-shadow: 0 0 25px #6ecbff44;
 }
 
 .card img {
@@ -41,27 +45,35 @@ body {
   border-radius: 10px;
 }
 
-.admin-box, .admin-panel {
+.admin-box {
   max-width: 400px;
-  margin: 60px auto;
-  background: #1a1a1a;
-  padding: 20px;
-  border-radius: 12px;
+  margin: 80px auto;
+  padding: 25px;
+  background: #111;
+  border-radius: 14px;
 }
 
 input, button {
   width: 100%;
+  padding: 12px;
   margin: 8px 0;
-  padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
 }
 
 button {
-  background: #00ffcc;
+  background: #6ecbff;
+  font-weight: bold;
   cursor: pointer;
 }
 
 .hidden {
   display: none;
+}
+
+#adminProducts div {
+  margin-top: 10px;
+  padding: 10px;
+  background: #000;
+  border-radius: 8px;
 }
