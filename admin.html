@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin | MzansiBuy</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<div class="admin-box">
+  <h2>Admin Login</h2>
+  <input type="password" id="adminPass" placeholder="Password">
+  <button onclick="login()">Enter</button>
+</div>
+
+<div class="admin-panel hidden">
+  <h2>Manage Products</h2>
+
+  <input id="name" placeholder="Product name">
+  <input id="price" placeholder="Price">
+  <input id="image" placeholder="Image URL">
+  <textarea id="desc" placeholder="Description"></textarea>
+
+  <button onclick="addProduct()">Add Product</button>
+
+  <h3>Products</h3>
+  <div id="adminProducts"></div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
