@@ -1,120 +1,59 @@
-body {
-  margin: 0;
+* {
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  color: #333;
 }
 
-/* Header */
-header.top {
+body {
+  margin: 0;
+  background: #f5f5f5;
+}
+
+.top {
+  background: #111;
+  color: white;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background: #000;
-  color: #fff;
 }
 
-header.top h1 {
-  margin: 0;
+.admin-link {
+  color: white;
+  text-decoration: none;
 }
 
-header.top .admin-icon i {
-  color: #fff;
-  font-size: 24px;
-}
-
-/* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
-  padding: 20px;
-}
-
-.grid-item {
-  background: #fff;
   padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: center;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.grid-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  padding-top: 100px;
-  left: 0;
-  top: 0;
+.card img {
   width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.6);
+  height: 120px;
+  object-fit: cover;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-  background-color: #fff;
-  margin: auto;
+  background: white;
   padding: 20px;
   width: 90%;
-  max-width: 500px;
-  border-radius: 10px;
-  position: relative;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: #000;
-}
-
-/* Admin */
-.admin-container {
-  max-width: 600px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.admin-container input, .admin-container textarea, .admin-container select {
-  width: 100%;
-  margin: 5px 0 15px 0;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.admin-container button {
-  background: #007BFF;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.admin-container button:hover {
-  background: #0056b3;
-}
-
-.error {
-  color: red;
-  margin-top: 5px;
+  max-width: 300px;
 }
