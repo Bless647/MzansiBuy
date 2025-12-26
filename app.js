@@ -116,7 +116,7 @@ if (productDetails) {
 }
 
 window.orderWhatsApp = (name, price) => {
-  const phone = "27XXXXXXXXX"; // ← PUT YOUR NUMBER HERE
+  const phone = "068 681 6463"; // ← PUT YOUR NUMBER HERE
   const msg = `Hello, I want to order:\n\nProduct: ${name}\nPrice: R ${price}`;
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
 };
