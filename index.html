@@ -5,51 +5,40 @@
   <title>MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <header class="top">
   <h1>MzansiBuy</h1>
-
-  <!-- Admin Icon -->
-  <a href="admin.html" class="icon-btn" title="Admin">
-    <!-- SVG User Gear -->
-    <svg viewBox="0 0 24 24">
-      <path d="M12 12a5 5 0 1 0-0.001-10.001A5 5 0 0 0 12 12Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"/>
-    </svg>
+  <a href="admin.html" class="admin-icon">
+    <i class="fa-solid fa-gear"></i>
   </a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<!-- PRODUCT MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-box">
+<!-- Order Modal -->
+<div id="orderModal" class="modal">
+  <div class="modal-content">
+    <span id="closeOrderModal" class="close">&times;</span>
+    <h2 id="modalProductName"></h2>
+    <p id="modalProductPrice"></p>
+    <p id="modalProductDesc"></p>
 
-    <!-- Back / Close -->
-    <button id="closeModal" class="icon-btn back-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M15 18l-6-6 6-6"/>
-      </svg>
-    </button>
+    <label>Your Name:</label>
+    <input type="text" id="customerName" placeholder="Enter your name">
 
-    <img id="modalImg" alt="">
-    <h2 id="modalName"></h2>
-    <p id="modalDesc"></p>
-    <strong id="modalPrice"></strong>
-
-    <input id="customerName" placeholder="Your name">
-
-    <select id="payment">
-      <option value="">Payment method</option>
+    <label>Payment Method:</label>
+    <select id="paymentMethod">
       <option value="Cash">Cash</option>
       <option value="Card">Card</option>
     </select>
 
-    <button id="orderBtn" class="primary-btn">Place Order</button>
+    <button id="placeOrder">Place Order</button>
   </div>
 </div>
 
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
