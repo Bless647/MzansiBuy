@@ -1,161 +1,69 @@
-/* ======================
-   GLOBAL PRODUCTS
-====================== */
-let products = JSON.parse(localStorage.getItem("products")) || [];
+// Products Page
+const productsGrid = document.getElementById("products");
+const orderModal = document.getElementById("orderModal");
+const closeOrderModal = document.getElementById("closeOrderModal");
+const modalProductName = document.getElementById("modalProductName");
+const modalProductPrice = document.getElementById("modalProductPrice");
+const modalProductDesc = document.getElementById("modalProductDesc");
+const customerNameInput = document.getElementById("customerName");
+const paymentMethod = document.getElementById("paymentMethod");
+const placeOrderBtn = document.getElementById("placeOrder");
 
-/* ======================
-   INDEX PAGE (PRODUCT GRID)
-====================== */
-const productsBox = document.getElementById("products");
+// Use localStorage for now (later Firebase)
+const products = JSON.parse(localStorage.getItem("products")) || [];
+const orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-if (productsBox) {
-  productsBox.innerHTML = "";
-  products.forEach((p, i) => {
-    productsBox.innerHTML += `
-      <div class="card" onclick="location.href='product.html?id=${i}'">
-        <img src="${p.image}">
-        <h3>${p.name}</h3>
-        <p>R ${Number(p.price).toFixed(2)}</p>
-      </div>
+function displayProducts() {
+  productsGrid.innerHTML = "";
+  products.forEach(prod => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+    div.innerHTML = `
+      <img src="${prod.image}" alt="${prod.name}" class="product-img">
+      <h3>${prod.name}</h3>
+      <p>Price: ${prod.price}</p>
     `;
+    div.addEventListener("click", () => openOrderModal(prod));
+    productsGrid.appendChild(div);
   });
 }
 
-/* ======================
-   ADMIN LOGIN
-====================== */
-const loginForm = document.getElementById("adminLoginForm");
-if (loginForm) {
-  loginForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const pass = document.getElementById("adminPassword").value;
+function openOrderModal(prod) {
+  modalProductName.textContent = prod.name;
+  modalProductPrice.textContent = `Price: ${prod.price}`;
+  modalProductDesc.textContent = prod.desc;
+  customerNameInput.value = "";
+  paymentMethod.value = "Cash";
+  orderModal.style.display = "block";
 
-    if (pass === "admin123") {
-      document.getElementById("adminPanel").classList.remove("hidden");
-      loginForm.style.display = "none";
-    } else {
-      document.getElementById("error").textContent = "Wrong password";
-    }
-  });
-}
-
-/* ======================
-   ADD PRODUCT (IMAGE + NUMERIC PRICE)
-====================== */
-const addBtn = document.getElementById("addProduct");
-if (addBtn) {
-  addBtn.addEventListener("click", () => {
-    const name = document.getElementById("pName").value.trim();
-    const rawPrice = document.getElementById("pPrice").value;
-    const file = document.getElementById("pImage").files[0];
-
-    const price = parseFloat(rawPrice);
-
-    if (!name || isNaN(price) || !file) {
-      alert("Enter product name, numeric price, and image");
+  placeOrderBtn.onclick = () => {
+    const customerName = customerNameInput.value.trim();
+    if (!customerName) {
+      alert("Please enter your name before ordering.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      products.push({
-        name,
-        price: price,
-        image: reader.result
-      });
-
-      localStorage.setItem("products", JSON.stringify(products));
-      location.reload();
+    const newOrder = {
+      customerName,
+      productName: prod.name,
+      productPrice: prod.price,
+      payment: paymentMethod.value,
+      timestamp: new Date().toISOString()
     };
 
-    reader.readAsDataURL(file);
-  });
+    orders.push(newOrder);
+    localStorage.setItem("orders", JSON.stringify(orders));
+    alert("Order placed successfully!");
+    orderModal.style.display = "none";
+  };
 }
 
-/* ======================
-   ADMIN PRODUCT LIST + DELETE
-====================== */
-const adminProducts = document.getElementById("adminProducts");
-if (adminProducts) {
-  adminProducts.innerHTML = "";
-  products.forEach((p, i) => {
-    adminProducts.innerHTML += `
-      <div>
-        ${p.name} – R ${Number(p.price).toFixed(2)}
-        <button onclick="deleteProduct(${i})">Delete</button>
-      </div>
-    `;
-  });
-}
-
-window.deleteProduct = index => {
-  products.splice(index, 1);
-  localStorage.setItem("products", JSON.stringify(products));
-  location.reload();
+closeOrderModal.onclick = () => {
+  orderModal.style.display = "none";
 };
 
-/* ======================
-   PRODUCT DETAILS PAGE
-====================== */
-const productDetails = document.getElementById("productDetails");
-
-if (productDetails) {
-  const params = new URLSearchParams(window.location.search);
-  const index = params.get("id");
-  const product = products[index];
-
-  if (!product) {
-    productDetails.innerHTML = "<p>Product not found</p>";
-  } else {
-    productDetails.innerHTML = `
-      <img src="${product.image}" style="width:100%;border-radius:12px">
-      <h2>${product.name}</h2>
-      <p>Price: R ${Number(product.price).toFixed(2)}</p>
-      <button onclick="orderWhatsApp('${product.name}', ${product.price})">
-        Order on WhatsApp
-      </button>
-    `;
-  }
-}
-
-/* ======================
-   WHATSAPP ORDER (AUTO LOCATION + CONFIRM)
-====================== */
-window.orderWhatsApp = (name, price) => {
-  const phone = "27686816463"; // YOUR NUMBER
-
-  // Step 1: Ask for location permission
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        const mapsLink = `https://maps.google.com/?q=${lat},${lon}`;
-
-        // Step 2: Ask if user is at delivery location
-        const atLocation = confirm("Are you currently at your delivery location? Click OK for YES, Cancel for NO.");
-
-        let message = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A`;
-
-        if (atLocation) {
-          message += `%0AMy delivery location: ${mapsLink}`;
-        } else {
-          message += `%0AMy delivery location is different. I will send it now.`;
-        }
-
-        window.open(`https://wa.me/${phone}?text=${message}`);
-      },
-      error => {
-        // User denied location
-        const msg = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A
-My delivery location is different. I will send it now.`;
-        window.open(`https://wa.me/${phone}?text=${msg}`);
-      }
-    );
-  } else {
-    // Browser does not support geolocation
-    const msg = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A
-My delivery location is different. I will send it now.`;
-    window.open(`https://wa.me/${phone}?text=${msg}`);
-  }
+window.onclick = (e) => {
+  if (e.target == orderModal) orderModal.style.display = "none";
 };
+
+displayProducts();
