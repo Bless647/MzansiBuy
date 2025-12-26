@@ -1,15 +1,18 @@
+/* ======================
+   GLOBAL PRODUCTS
+====================== */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-const productsBox = document.getElementById("products");
-const adminProducts = document.getElementById("adminProducts");
-
 /* ======================
-   DISPLAY PRODUCTS
+   INDEX PAGE (PRODUCT GRID)
 ====================== */
+const productsBox = document.getElementById("products");
+
 if (productsBox) {
-  products.forEach(p => {
+  productsBox.innerHTML = "";
+  products.forEach((p, i) => {
     productsBox.innerHTML += `
-      <div class="card">
+      <div class="card" onclick="location.href='product.html?id=${i}'">
         <img src="${p.image}">
         <h3>${p.name}</h3>
         <p>R ${p.price}</p>
@@ -21,49 +24,55 @@ if (productsBox) {
 /* ======================
    ADMIN LOGIN
 ====================== */
-document.getElementById("adminLoginForm")?.addEventListener("submit", e => {
-  e.preventDefault();
-  const pass = document.getElementById("adminPassword").value;
+const loginForm = document.getElementById("adminLoginForm");
+if (loginForm) {
+  loginForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const pass = document.getElementById("adminPassword").value;
 
-  if (pass === "admin123") {
-    document.getElementById("adminPanel").classList.remove("hidden");
-    e.target.style.display = "none";
-  } else {
-    document.getElementById("error").textContent = "Wrong password";
-  }
-});
+    if (pass === "admin123") {
+      document.getElementById("adminPanel").classList.remove("hidden");
+      loginForm.style.display = "none";
+    } else {
+      document.getElementById("error").textContent = "Wrong password";
+    }
+  });
+}
 
 /* ======================
-   ADD PRODUCT (UPLOAD IMAGE)
+   ADD PRODUCT (IMAGE UPLOAD)
 ====================== */
-document.getElementById("addProduct")?.addEventListener("click", () => {
-  const name = pName.value;
-  const price = pPrice.value;
-  const file = pImage.files[0];
+const addBtn = document.getElementById("addProduct");
+if (addBtn) {
+  addBtn.addEventListener("click", () => {
+    const name = document.getElementById("pName").value;
+    const price = document.getElementById("pPrice").value;
+    const file = document.getElementById("pImage").files[0];
 
-  if (!name || !price || !file) {
-    alert("Fill all fields");
-    return;
-  }
+    if (!name || !price || !file) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    products.push({
-      name,
-      price,
-      image: reader.result
-    });
+    const reader = new FileReader();
+    reader.onload = () => {
+      products.push({
+        name,
+        price,
+        image: reader.result
+      });
 
-    localStorage.setItem("products", JSON.stringify(products));
-    location.reload();
-  };
-
-  reader.readAsDataURL(file);
-});
+      localStorage.setItem("products", JSON.stringify(products));
+      location.reload();
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 /* ======================
    ADMIN PRODUCT LIST + DELETE
 ====================== */
+const adminProducts = document.getElementById("adminProducts");
 if (adminProducts) {
   adminProducts.innerHTML = "";
   products.forEach((p, i) => {
@@ -80,4 +89,34 @@ window.deleteProduct = index => {
   products.splice(index, 1);
   localStorage.setItem("products", JSON.stringify(products));
   location.reload();
+};
+
+/* ======================
+   PRODUCT DETAILS PAGE
+====================== */
+const productDetails = document.getElementById("productDetails");
+
+if (productDetails) {
+  const params = new URLSearchParams(window.location.search);
+  const index = params.get("id");
+  const product = products[index];
+
+  if (!product) {
+    productDetails.innerHTML = "<p>Product not found</p>";
+  } else {
+    productDetails.innerHTML = `
+      <img src="${product.image}" style="width:100%;border-radius:12px">
+      <h2>${product.name}</h2>
+      <p>Price: R ${product.price}</p>
+      <button onclick="orderWhatsApp('${product.name}', '${product.price}')">
+        Order on WhatsApp
+      </button>
+    `;
+  }
+}
+
+window.orderWhatsApp = (name, price) => {
+  const phone = "27XXXXXXXXX"; // ← PUT YOUR NUMBER HERE
+  const msg = `Hello, I want to order:\n\nProduct: ${name}\nPrice: R ${price}`;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
 };
