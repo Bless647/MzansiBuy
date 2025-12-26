@@ -122,7 +122,7 @@ if (productDetails) {
    WHATSAPP ORDER (AUTO MESSAGE)
 ====================== */
 window.orderWhatsApp = (name, price) => {
-  const phone = "+27686816463"; // YOUR NUMBER
+  const phone = "27686816463"; // YOUR NUMBER
   const message =
     `Hello, I would like to order:%0A%0A` +
     `Product: ${name}%0A` +
