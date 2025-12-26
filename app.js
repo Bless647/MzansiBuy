@@ -1,44 +1,47 @@
 const products = [
-  { id: 1, name: "Pizza", price: 50, img: "https://via.placeholder.com/150" },
-  { id: 2, name: "Burger", price: 40, img: "https://via.placeholder.com/150" }
+  {
+    name: "Smart Watch",
+    price: 1299,
+    desc: "Modern smart watch",
+    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+  }
 ];
 
 const grid = document.getElementById("products");
-const modal = document.getElementById("orderModal");
-let selectedProduct = null;
+const modal = document.getElementById("modal");
 
 products.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
     <img src="${p.img}">
-    <h4>${p.name}</h4>
-    <p>R${p.price}</p>
+    <h3>${p.name}</h3>
+    <span>R ${p.price}</span>
   `;
-  div.onclick = () => openModal(p);
-  grid.appendChild(div);
+  card.onclick = () => openModal(p);
+  grid.appendChild(card);
 });
 
-function openModal(p) {
-  selectedProduct = p;
-  document.getElementById("orderProduct").innerText = p.name;
+function openModal(p){
   modal.style.display = "flex";
+  modal.querySelector("#modalImg").src = p.img;
+  modal.querySelector("#modalName").textContent = p.name;
+  modal.querySelector("#modalDesc").textContent = p.desc;
+  modal.querySelector("#modalPrice").textContent = "R " + p.price;
 }
 
-function closeModal() {
+document.getElementById("closeModal").onclick = ()=>{
   modal.style.display = "none";
-}
+};
 
-document.getElementById("confirmOrder").onclick = () => {
+document.getElementById("orderBtn").onclick = ()=>{
   const name = document.getElementById("customerName").value;
-  const payment = document.getElementById("payment").value;
+  const pay = document.getElementById("payment").value;
 
-  if (!name) return alert("Enter name");
+  if(!name || !pay){
+    alert("Please complete all fields");
+    return;
+  }
 
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-  orders.push({ product: selectedProduct.name, name, payment });
-  localStorage.setItem("orders", JSON.stringify(orders));
-
-  alert("Order placed");
-  closeModal();
+  alert("Order ready ✔ (next step: admin orders)");
 };
