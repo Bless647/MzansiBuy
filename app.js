@@ -1,69 +1,52 @@
-const PASSWORD = "admin123";
+const products = JSON.parse(localStorage.getItem("products")) || [];
 
-function login() {
-  const pass = document.getElementById("adminPass").value;
-  if (pass === PASSWORD) {
-    document.querySelector(".admin-box").style.display = "none";
-    document.getElementById("panel").classList.remove("hidden");
-    loadAdmin();
-  } else {
-    document.getElementById("error").innerText = "Wrong password";
-  }
-}
+const productsBox = document.getElementById("products");
+const adminProducts = document.getElementById("adminProducts");
 
-function getProducts() {
-  return JSON.parse(localStorage.getItem("products") || "[]");
-}
-
-function saveProducts(p) {
-  localStorage.setItem("products", JSON.stringify(p));
-}
-
-function addProduct() {
-  const p = getProducts();
-  p.push({
-    name: name.value,
-    price: price.value,
-    image: image.value
-  });
-  saveProducts(p);
-  loadAdmin();
-  loadStore();
-}
-
-function loadAdmin() {
-  const box = document.getElementById("adminProducts");
-  if (!box) return;
-  box.innerHTML = "";
-  getProducts().forEach((p, i) => {
-    box.innerHTML += `
-      <div>
-        ${p.name} - R${p.price}
-        <button onclick="remove(${i})">Delete</button>
-      </div>`;
-  });
-}
-
-function remove(i) {
-  const p = getProducts();
-  p.splice(i, 1);
-  saveProducts(p);
-  loadAdmin();
-  loadStore();
-}
-
-function loadStore() {
-  const grid = document.getElementById("products");
-  if (!grid) return;
-  grid.innerHTML = "";
-  getProducts().forEach(p => {
-    grid.innerHTML += `
+// DISPLAY PRODUCTS (INDEX)
+if (productsBox) {
+  products.forEach(p => {
+    productsBox.innerHTML += `
       <div class="card">
         <img src="${p.image}">
         <h3>${p.name}</h3>
-        <p>R${p.price}</p>
-      </div>`;
+        <p>R ${p.price}</p>
+      </div>
+    `;
   });
 }
 
-loadStore();
+// ADMIN LOGIN
+document.getElementById("adminLoginForm")?.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const pass = document.getElementById("adminPassword").value;
+  const error = document.getElementById("error");
+
+  if (pass === "admin123") {
+    document.getElementById("adminPanel").classList.remove("hidden");
+    e.target.style.display = "none";
+  } else {
+    error.textContent = "Wrong password";
+  }
+});
+
+// ADD PRODUCT
+document.getElementById("addProduct")?.addEventListener("click", () => {
+  const name = pName.value;
+  const price = pPrice.value;
+  const image = pImage.value;
+
+  if (!name || !price || !image) return;
+
+  products.push({ name, price, image });
+  localStorage.setItem("products", JSON.stringify(products));
+  location.reload();
+});
+
+// SHOW ADMIN PRODUCTS
+if (adminProducts) {
+  products.forEach(p => {
+    adminProducts.innerHTML += `<div>${p.name} – R ${p.price}</div>`;
+  });
+}
