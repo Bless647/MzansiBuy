@@ -15,7 +15,7 @@ if (productsBox) {
       <div class="card" onclick="location.href='product.html?id=${i}'">
         <img src="${p.image}">
         <h3>${p.name}</h3>
-        <p>R ${p.price}</p>
+        <p>R ${Number(p.price).toFixed(2)}</p>
       </div>
     `;
   });
@@ -40,17 +40,19 @@ if (loginForm) {
 }
 
 /* ======================
-   ADD PRODUCT (IMAGE UPLOAD)
+   ADD PRODUCT (IMAGE + NUMERIC PRICE)
 ====================== */
 const addBtn = document.getElementById("addProduct");
 if (addBtn) {
   addBtn.addEventListener("click", () => {
-    const name = document.getElementById("pName").value;
-    const price = document.getElementById("pPrice").value;
+    const name = document.getElementById("pName").value.trim();
+    const rawPrice = document.getElementById("pPrice").value;
     const file = document.getElementById("pImage").files[0];
 
-    if (!name || !price || !file) {
-      alert("Please fill all fields");
+    const price = parseFloat(rawPrice);
+
+    if (!name || isNaN(price) || !file) {
+      alert("Enter product name, numeric price, and image");
       return;
     }
 
@@ -58,13 +60,14 @@ if (addBtn) {
     reader.onload = () => {
       products.push({
         name,
-        price,
+        price: price,          // 🔒 stored as NUMBER only
         image: reader.result
       });
 
       localStorage.setItem("products", JSON.stringify(products));
       location.reload();
     };
+
     reader.readAsDataURL(file);
   });
 }
@@ -78,7 +81,7 @@ if (adminProducts) {
   products.forEach((p, i) => {
     adminProducts.innerHTML += `
       <div>
-        ${p.name} – R ${p.price}
+        ${p.name} – R ${Number(p.price).toFixed(2)}
         <button onclick="deleteProduct(${i})">Delete</button>
       </div>
     `;
@@ -107,16 +110,23 @@ if (productDetails) {
     productDetails.innerHTML = `
       <img src="${product.image}" style="width:100%;border-radius:12px">
       <h2>${product.name}</h2>
-      <p>Price: R ${product.price}</p>
-      <button onclick="orderWhatsApp('${product.name}', '${product.price}')">
+      <p>Price: R ${Number(product.price).toFixed(2)}</p>
+      <button onclick="orderWhatsApp('${product.name}', ${product.price})">
         Order on WhatsApp
       </button>
     `;
   }
 }
 
+/* ======================
+   WHATSAPP ORDER (AUTO MESSAGE)
+====================== */
 window.orderWhatsApp = (name, price) => {
-  const phone = "068 681 6463"; // ← PUT YOUR NUMBER HERE
-  const msg = `Hello, I want to order:\n\nProduct: ${name}\nPrice: R ${price}`;
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
+  const phone = "27686816463"; // YOUR NUMBER
+  const message =
+    `Hello, I would like to order:%0A%0A` +
+    `Product: ${name}%0A` +
+    `Price: R ${Number(price).toFixed(2)}`;
+
+  window.open(`https://wa.me/${phone}?text=${message}`);
 };
