@@ -41,16 +41,13 @@ async function addProduct() {
     return;
   }
 
-  // Upload image
   const imageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
   await uploadBytes(imageRef, imageFile);
   const imageURL = await getDownloadURL(imageRef);
 
-  // Save product
   await addDoc(collection(db, "products"), { name, price, desc, imageURL });
-
   alert("✅ Product added successfully!");
-  loadProducts(); // refresh product list
+  loadProducts();
 }
 
 // Load products for admin panel
