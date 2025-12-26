@@ -60,7 +60,7 @@ if (addBtn) {
     reader.onload = () => {
       products.push({
         name,
-        price: price,          // 🔒 stored as NUMBER only
+        price: price,
         image: reader.result
       });
 
@@ -119,14 +119,43 @@ if (productDetails) {
 }
 
 /* ======================
-   WHATSAPP ORDER (AUTO MESSAGE)
+   WHATSAPP ORDER (AUTO LOCATION + CONFIRM)
 ====================== */
 window.orderWhatsApp = (name, price) => {
   const phone = "27686816463"; // YOUR NUMBER
-  const message =
-    `Hello, I would like to order:%0A%0A` +
-    `Product: ${name}%0A` +
-    `Price: R ${Number(price).toFixed(2)}`;
 
-  window.open(`https://wa.me/${phone}?text=${message}`);
+  // Step 1: Ask for location permission
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const mapsLink = `https://maps.google.com/?q=${lat},${lon}`;
+
+        // Step 2: Ask if user is at delivery location
+        const atLocation = confirm("Are you currently at your delivery location? Click OK for YES, Cancel for NO.");
+
+        let message = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A`;
+
+        if (atLocation) {
+          message += `%0AMy delivery location: ${mapsLink}`;
+        } else {
+          message += `%0AMy delivery location is different. I will send it now.`;
+        }
+
+        window.open(`https://wa.me/${phone}?text=${message}`);
+      },
+      error => {
+        // User denied location
+        const msg = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A
+My delivery location is different. I will send it now.`;
+        window.open(`https://wa.me/${phone}?text=${msg}`);
+      }
+    );
+  } else {
+    // Browser does not support geolocation
+    const msg = `Hello, I would like to order:%0A%0AProduct: ${name}%0APrice: R ${Number(price).toFixed(2)}%0A
+My delivery location is different. I will send it now.`;
+    window.open(`https://wa.me/${phone}?text=${msg}`);
+  }
 };
