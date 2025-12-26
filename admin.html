@@ -2,33 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin - MzansiBuy</title>
+  <title>Admin | MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
 <div class="admin-box">
+
   <h2>Admin Login</h2>
-  <input type="password" id="adminPass" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p id="error"></p>
+
+  <form id="adminLoginForm">
+    <input type="password" id="adminPassword" placeholder="Admin password" required>
+    <button type="submit">Login</button>
+    <p id="error"></p>
+  </form>
+
+  <div id="adminPanel" class="hidden">
+    <h3>Add Product</h3>
+
+    <input id="pName" placeholder="Product name">
+    <input id="pPrice" placeholder="Price">
+    <input id="pImage" placeholder="Image URL">
+    <button id="addProduct">Add</button>
+
+    <h3>Products</h3>
+    <div id="adminProducts"></div>
+  </div>
+
 </div>
 
-<div class="admin-panel hidden" id="panel">
-  <h2>Add Product</h2>
-
-  <input id="name" placeholder="Product name">
-  <input id="price" placeholder="Price">
-  <input id="image" placeholder="Image URL">
-  <button onclick="addProduct()">Add</button>
-
-  <h3>Products</h3>
-  <div id="adminProducts"></div>
-
-  <a href="index.html">⬅ Back to store</a>
-</div>
-
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
