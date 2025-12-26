@@ -2,51 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin | MzansiBuy</title>
+  <title>MzansiBuy Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<div class="admin-box">
+<header class="top">
+  <h1>MzansiBuy Admin</h1>
+  <a href="#" class="admin-icon">
+    <i class="fa-solid fa-user-gear"></i>
+  </a>
+</header>
 
-  <h2>Admin Login</h2>
-
-  <form id="adminLoginForm">
-    <input 
-      type="password" 
-      id="adminPassword" 
-      placeholder="Admin password" 
-      required
-    >
-    <button type="submit">Login</button>
-    <p id="error"></p>
-  </form>
-
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel" class="hidden">
-
-    <h3>Add Product</h3>
-
-    <input id="pName" placeholder="Product name">
-    <input id="pPrice" placeholder="Price (R)">
-    
-    <!-- IMAGE UPLOAD (NO URL) -->
-    <input 
-      id="pImage" 
-      type="file" 
-      accept="image/*"
-    >
-
-    <button id="addProduct">Add Product</button>
-
-    <h3>Products</h3>
-    <div id="adminProducts"></div>
-
+<main class="grid admin-grid">
+  <div class="card" id="manageProducts">
+    <i class="fa-solid fa-box"></i>
+    <h2>Manage Products</h2>
   </div>
+  <div class="card" id="viewOrders">
+    <i class="fa-solid fa-list-check"></i>
+    <h2>View Orders</h2>
+  </div>
+  <div class="card" id="viewSuggestions">
+    <i class="fa-solid fa-comment-dots"></i>
+    <h2>Suggestions</h2>
+  </div>
+  <div class="card" id="adminSettings">
+    <i class="fa-solid fa-gear"></i>
+    <h2>Settings</h2>
+  </div>
+</main>
 
-</div>
+<div id="adminContent" class="admin-content"></div>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="admin.js"></script>
 </body>
 </html>
