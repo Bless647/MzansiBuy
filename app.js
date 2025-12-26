@@ -1,122 +1,137 @@
-let products = [];
-let adminPassword = "1234"; // Change to your desired password
+const adminPassword = "12345"; // Change this to your real password
 
-// DOM Elements
-const productsContainer = document.getElementById("products");
-const orderModal = document.getElementById("orderModal");
-const closeOrderModal = document.getElementById("closeOrderModal");
-const modalProductName = document.getElementById("modalProductName");
-const modalProductPrice = document.getElementById("modalProductPrice");
-const modalProductDesc = document.getElementById("modalProductDesc");
-const customerNameInput = document.getElementById("customerName");
-const paymentMethodSelect = document.getElementById("paymentMethod");
-const placeOrderBtn = document.getElementById("placeOrder");
-
-// Admin Elements
-const adminPasswordInput = document.getElementById("adminPasswordInput");
+// Admin login elements
 const adminLoginBtn = document.getElementById("adminLoginBtn");
+const adminPasswordInput = document.getElementById("adminPasswordInput");
 const loginError = document.getElementById("loginError");
 const controlPanel = document.getElementById("controlPanel");
-const addProductBtn = document.getElementById("addProductBtn");
-const productNameInput = document.getElementById("productNameInput");
-const productPriceInput = document.getElementById("productPriceInput");
-const productDescInput = document.getElementById("productDescInput");
-const productImageInput = document.getElementById("productImageInput");
-const adminProductsList = document.getElementById("adminProductsList");
+const loginDiv = document.getElementById("loginDiv");
 
-// Admin Login
+// Product elements
+const productName = document.getElementById("productName");
+const productPrice = document.getElementById("productPrice");
+const productDesc = document.getElementById("productDesc");
+const productImg = document.getElementById("productImg");
+const addProductBtn = document.getElementById("addProductBtn");
+const adminProductsList = document.getElementById("adminProductsList");
+const productsGrid = document.getElementById("products");
+
+// Local storage products array
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+// Render products on index and admin
+function renderProducts() {
+  if(productsGrid){
+    productsGrid.innerHTML = "";
+    products.forEach((p, idx)=>{
+      const div = document.createElement("div");
+      div.className="grid-item";
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}" style="width:100%; height:150px; object-fit:cover;">
+        <h3>${p.name}</h3>
+        <p>R${p.price}</p>
+      `;
+      div.addEventListener("click", ()=>{
+        openOrderModal(p);
+      });
+      productsGrid.appendChild(div);
+    });
+  }
+
+  if(adminProductsList){
+    adminProductsList.innerHTML = "";
+    products.forEach((p, idx)=>{
+      const div = document.createElement("div");
+      div.className="grid-item";
+      div.innerHTML = `
+        <h4>${p.name}</h4>
+        <p>R${p.price}</p>
+        <p>${p.desc}</p>
+        <button data-index="${idx}" class="deleteProductBtn">Delete</button>
+      `;
+      adminProductsList.appendChild(div);
+    });
+
+    document.querySelectorAll(".deleteProductBtn").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const index = e.target.dataset.index;
+        products.splice(index,1);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+      });
+    });
+  }
+}
+
+// Admin login
 if(adminLoginBtn){
   adminLoginBtn.addEventListener("click", ()=>{
     if(adminPasswordInput.value === adminPassword){
       loginError.textContent="";
       controlPanel.style.display="block";
-      document.getElementById("loginDiv").style.display="none";
-      renderAdminProducts();
+      loginDiv.style.display="none";
+      renderProducts();
     }else{
       loginError.textContent="Incorrect Password";
     }
   });
 }
 
-// Add Product
+// Add product
 if(addProductBtn){
   addProductBtn.addEventListener("click", ()=>{
-    const name = productNameInput.value.trim();
-    const price = Number(productPriceInput.value);
-    const desc = productDescInput.value.trim();
-    const img = productImageInput.value.trim();
-    if(name && price && img){
-      const product = {name, price, desc, img};
-      products.push(product);
-      renderAdminProducts();
-      renderProducts();
-      productNameInput.value="";
-      productPriceInput.value="";
-      productDescInput.value="";
-      productImageInput.value="";
+    if(!productName.value || !productPrice.value || !productImg.value){
+      alert("Please fill all required fields");
+      return;
     }
-  });
-}
-
-// Render Admin Products
-function renderAdminProducts(){
-  adminProductsList.innerHTML="";
-  products.forEach((p,i)=>{
-    const div = document.createElement("div");
-    div.classList.add("card");
-    div.innerHTML=`<strong>${p.name}</strong> - R${p.price}<button data-index="${i}" class="deleteBtn">Delete</button>`;
-    adminProductsList.appendChild(div);
-  });
-
-  document.querySelectorAll(".deleteBtn").forEach(btn=>{
-    btn.addEventListener("click",(e)=>{
-      const index = e.target.getAttribute("data-index");
-      products.splice(index,1);
-      renderAdminProducts();
-      renderProducts();
+    products.push({
+      name: productName.value,
+      price: Number(productPrice.value),
+      desc: productDesc.value || "",
+      img: productImg.value
     });
+    localStorage.setItem("products", JSON.stringify(products));
+    productName.value="";
+    productPrice.value="";
+    productDesc.value="";
+    productImg.value="";
+    renderProducts();
   });
 }
 
-// Render Products for Index
-function renderProducts(){
-  if(!productsContainer) return;
-  productsContainer.innerHTML="";
-  products.forEach((p,i)=>{
-    const div = document.createElement("div");
-    div.classList.add("card");
-    div.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R${p.price}</p>`;
-    div.addEventListener("click",()=>{
-      modalProductName.textContent = p.name;
-      modalProductPrice.textContent = "R"+p.price;
-      modalProductDesc.textContent = p.desc;
-      orderModal.style.display="block";
-    });
-    productsContainer.appendChild(div);
-  });
+// Order modal
+const orderModal = document.getElementById("orderModal");
+const closeOrderModal = document.getElementById("closeOrderModal");
+const modalProductName = document.getElementById("modalProductName");
+const modalProductPrice = document.getElementById("modalProductPrice");
+const modalProductDesc = document.getElementById("modalProductDesc");
+const customerName = document.getElementById("customerName");
+const paymentMethod = document.getElementById("paymentMethod");
+const placeOrderBtn = document.getElementById("placeOrder");
+
+function openOrderModal(product){
+  modalProductName.textContent = product.name;
+  modalProductPrice.textContent = `R${product.price}`;
+  modalProductDesc.textContent = product.desc;
+  orderModal.style.display="block";
 }
 
-// Close Modal
 if(closeOrderModal){
-  closeOrderModal.addEventListener("click",()=>{
+  closeOrderModal.onclick = ()=>{
     orderModal.style.display="none";
-  });
+  };
 }
 
-// Place Order Button
 if(placeOrderBtn){
-  placeOrderBtn.addEventListener("click",()=>{
-    const customerName = customerNameInput.value.trim();
-    const paymentMethod = paymentMethodSelect.value;
-    if(!customerName){
+  placeOrderBtn.addEventListener("click", ()=>{
+    if(!customerName.value){
       alert("Please enter your name");
       return;
     }
-    alert(`Order placed!\nName: ${customerName}\nPayment: ${paymentMethod}\nProduct: ${modalProductName.textContent}\nPrice: ${modalProductPrice.textContent}`);
+    alert(`Order placed for ${customerName.value} - ${paymentMethod.value}`);
     orderModal.style.display="none";
-    customerNameInput.value="";
   });
 }
 
-// Initial Render
+// Initial render
 renderProducts();
