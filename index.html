@@ -8,27 +8,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+
 <header class="top">
   <h1>MzansiBuy</h1>
-  <a href="admin.html" class="admin-icon"><i class="fa-solid fa-user-gear"></i></a>
+  <a href="admin.html" class="admin-icon">
+    <i class="fa-solid fa-user-gear"></i>
+  </a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<!-- Product Modal -->
+<!-- Order Modal -->
 <div id="orderModal" class="modal">
   <div class="modal-content">
     <span id="closeOrderModal" class="close">&times;</span>
     <h2 id="modalProductName"></h2>
     <p id="modalProductPrice"></p>
     <p id="modalProductDesc"></p>
+
     <label>Your Name:</label>
     <input type="text" id="customerName" placeholder="Enter your name">
+
     <label>Payment Method:</label>
     <select id="paymentMethod">
       <option value="Cash">Cash</option>
       <option value="Card">Card</option>
     </select>
+
     <button id="placeOrder">Place Order</button>
   </div>
 </div>
