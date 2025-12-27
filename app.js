@@ -1,143 +1,133 @@
-const adminPassword = "admin123";
+const productsContainer = document.getElementById('products');
+const adminContainer = document.getElementById('adminProducts');
+const adminContent = document.getElementById('adminContent');
+const passwordModal = document.getElementById('passwordModal');
+const loginAdminBtn = document.getElementById('loginAdmin');
+const adminPasswordInput = document.getElementById('adminPassword');
 
-// Elements
-const passwordModal = document.getElementById("passwordModal");
-const adminPasswordInput = document.getElementById("adminPasswordInput");
-const submitAdminPassword = document.getElementById("submitAdminPassword");
-const passwordError = document.getElementById("passwordError");
+const orderModal = document.getElementById('orderModal');
+const closeOrderModal = document.getElementById('closeOrderModal');
+const modalProductName = document.getElementById('modalProductName');
+const modalProductPrice = document.getElementById('modalProductPrice');
+const modalProductDesc = document.getElementById('modalProductDesc');
+const customerNameInput = document.getElementById('customerName');
+const paymentMethodSelect = document.getElementById('paymentMethod');
+const placeOrderBtn = document.getElementById('placeOrder');
 
-const adminDashboard = document.getElementById("adminDashboard");
-const addProductBtn = document.getElementById("addProductBtn");
-const productList = document.getElementById("productList");
+let products = JSON.parse(localStorage.getItem('products')) || [];
 
-const productName = document.getElementById("productName");
-const productDesc = document.getElementById("productDesc");
-const productPrice = document.getElementById("productPrice");
-const productImage = document.getElementById("productImage");
-
-// LocalStorage key
-const STORAGE_KEY = "mzansiProducts";
-
-// Load products from localStorage
-let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-// Function to render products on admin
-function renderAdminProducts() {
-  productList.innerHTML = "";
-  products.forEach((product, index) => {
-    const div = document.createElement("div");
-    div.classList.add("product-card");
-    div.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>${product.desc}</p>
-      <p>R${product.price}</p>
-      <button class="edit-btn" data-index="${index}"><i class="fa-solid fa-pen"></i></button>
-      <button class="delete-btn" data-index="${index}"><i class="fa-solid fa-trash"></i></button>
-    `;
-    productList.appendChild(div);
-  });
-
-  // Attach delete listeners
-  document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const index = e.target.closest("button").dataset.index;
-      products.splice(index, 1);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-      renderAdminProducts();
-      renderIndexProducts();
+// --- Functions to display products ---
+function renderProducts() {
+  if(productsContainer){
+    productsContainer.innerHTML = '';
+    products.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>${p.price}</p>
+      `;
+      card.addEventListener('click', () => openOrderModal(p));
+      productsContainer.appendChild(card);
     });
-  });
-
-  // Attach edit listeners
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const index = e.target.closest("button").dataset.index;
-      const product = products[index];
-      const newName = prompt("Edit Product Name:", product.name);
-      const newDesc = prompt("Edit Description:", product.desc);
-      const newPrice = prompt("Edit Price:", product.price);
-      const newImage = prompt("Edit Image URL:", product.image);
-
-      if(newName && newDesc && newPrice && newImage){
-        products[index] = { name: newName, desc: newDesc, price: newPrice, image: newImage };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        renderAdminProducts();
-        renderIndexProducts();
-      }
-    });
-  });
-}
-
-// Add product
-addProductBtn.addEventListener("click", () => {
-  const name = productName.value.trim();
-  const desc = productDesc.value.trim();
-  const price = parseFloat(productPrice.value);
-  const image = productImage.value.trim();
-
-  if(!name || !desc || !price || !image) return alert("Fill all fields!");
-
-  const newProduct = { name, desc, price, image };
-  products.push(newProduct);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-
-  // Clear inputs
-  productName.value = "";
-  productDesc.value = "";
-  productPrice.value = "";
-  productImage.value = "";
-
-  renderAdminProducts();
-  renderIndexProducts();
-});
-
-// Password check
-submitAdminPassword.addEventListener("click", () => {
-  if(adminPasswordInput.value === adminPassword){
-    passwordModal.classList.add("hidden");
-    adminDashboard.classList.remove("hidden");
-  } else {
-    passwordError.textContent = "Incorrect password!";
   }
-});
 
-// INITIAL RENDER
-renderAdminProducts();
-
-// Function to render products on index.html
-export function renderIndexProducts() {
-  const indexProducts = document.getElementById("products");
-  if(!indexProducts) return;
-  indexProducts.innerHTML = "";
-  products.forEach(product => {
-    const div = document.createElement("div");
-    div.classList.add("product-card");
-    div.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>R${product.price}</p>
-    `;
-    indexProducts.appendChild(div);
-
-    div.addEventListener("click", () => {
-      const modal = document.getElementById("orderModal");
-      if(modal){
-        modal.style.display = "block";
-        document.getElementById("modalProductName").textContent = product.name;
-        document.getElementById("modalProductPrice").textContent = `R${product.price}`;
-        document.getElementById("modalProductDesc").textContent = product.desc;
-
-        const placeBtn = document.getElementById("placeOrder");
-        const customerName = document.getElementById("customerName");
-        const paymentMethod = document.getElementById("paymentMethod");
-
-        placeBtn.onclick = () => {
-          if(!customerName.value.trim()) return alert("Enter your name");
-          alert(`Order placed by ${customerName.value} for ${product.name} (R${product.price}) via ${paymentMethod.value}`);
-          modal.style.display = "none";
-        };
-      }
+  if(adminContainer){
+    adminContainer.innerHTML = '';
+    products.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'product-card admin';
+      card.innerHTML = `
+        <h3>${p.name}</h3>
+        <p>${p.price}</p>
+        <p>${p.desc}</p>
+        <button class="edit" data-id="${idx}">Edit</button>
+        <button class="delete" data-id="${idx}">Delete</button>
+      `;
+      adminContainer.appendChild(card);
     });
+    document.querySelectorAll('.delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.target.dataset.id;
+        products.splice(id, 1);
+        saveAndRender();
+      });
+    });
+    document.querySelectorAll('.edit').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.target.dataset.id;
+        const p = products[id];
+        document.getElementById('productName').value = p.name;
+        document.getElementById('productDesc').value = p.desc;
+        document.getElementById('productPrice').value = p.price;
+        document.getElementById('productImg').value = p.img;
+        products.splice(id, 1);
+        saveAndRender();
+      });
+    });
+  }
+}
+
+// --- Admin Password Login ---
+if(loginAdminBtn){
+  loginAdminBtn.addEventListener('click', () => {
+    if(adminPasswordInput.value === 'admin123'){
+      passwordModal.style.display = 'none';
+      adminContent.style.display = 'block';
+    } else {
+      alert('Wrong Password');
+    }
   });
 }
+
+// --- Add Product ---
+const addProductBtn = document.getElementById('addProduct');
+if(addProductBtn){
+  addProductBtn.addEventListener('click', () => {
+    const name = document.getElementById('productName').value;
+    const desc = document.getElementById('productDesc').value;
+    const price = document.getElementById('productPrice').value;
+    const img = document.getElementById('productImg').value;
+    if(name && desc && price && img){
+      products.push({name, desc, price, img});
+      saveAndRender();
+      document.getElementById('productName').value = '';
+      document.getElementById('productDesc').value = '';
+      document.getElementById('productPrice').value = '';
+      document.getElementById('productImg').value = '';
+    } else alert('Fill all fields!');
+  });
+}
+
+// --- Save and Render ---
+function saveAndRender(){
+  localStorage.setItem('products', JSON.stringify(products));
+  renderProducts();
+}
+
+// --- Order Modal ---
+function openOrderModal(p){
+  modalProductName.innerText = p.name;
+  modalProductPrice.innerText = p.price;
+  modalProductDesc.innerText = p.desc;
+  orderModal.style.display = 'block';
+}
+
+if(closeOrderModal){
+  closeOrderModal.onclick = () => { orderModal.style.display = 'none'; };
+}
+
+if(placeOrderBtn){
+  placeOrderBtn.addEventListener('click', () => {
+    const customerName = customerNameInput.value;
+    const payment = paymentMethodSelect.value;
+    if(!customerName) return alert('Enter your name');
+    alert(`Order placed!\nName: ${customerName}\nProduct: ${modalProductName.innerText}\nPrice: ${modalProductPrice.innerText}\nPayment: ${payment}`);
+    orderModal.style.display = 'none';
+    customerNameInput.value = '';
+  });
+}
+
+// --- Initial Render ---
+renderProducts();
