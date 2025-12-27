@@ -1,97 +1,96 @@
-const adminPassword = "admin123";
+// ===============================
+// PRODUCTS (TEMP DATA — SAFE)
+// ===============================
+const products = [
+  {
+    id: 1,
+    name: "Bluetooth Speaker",
+    price: 499,
+    image: "https://images.unsplash.com/photo-1585386959984-a4155228fdb1",
+    description: "Portable high-quality sound speaker"
+  },
+  {
+    id: 2,
+    name: "Wireless Headphones",
+    price: 899,
+    image: "https://images.unsplash.com/photo-1518443881415-1f08dbd7b7ae",
+    description: "Noise cancelling headphones"
+  },
+  {
+    id: 3,
+    name: "Smart Watch",
+    price: 1299,
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    description: "Track fitness and notifications"
+  }
+];
 
-// Admin Login
-const loginButton = document.getElementById("loginButton");
-if (loginButton) {
-  loginButton.addEventListener("click", () => {
-    const input = document.getElementById("adminPassword").value;
-    const error = document.getElementById("loginError");
-    if (input === adminPassword) {
-      window.location.href = "admin.html";
-    } else {
-      error.textContent = "Incorrect password. Try again.";
-    }
-  });
-}
+// ===============================
+// ELEMENTS
+// ===============================
+const grid = document.getElementById("products");
+const modal = document.getElementById("orderModal");
+const closeBtn = document.getElementById("closeOrderModal");
 
-// Admin Dashboard
-let products = JSON.parse(localStorage.getItem("products")) || [];
+const modalName = document.getElementById("modalProductName");
+const modalPrice = document.getElementById("modalProductPrice");
+const modalDesc = document.getElementById("modalProductDesc");
 
-const productsContainer = document.getElementById("productsContainer");
-const addButton = document.getElementById("addProduct");
+const placeOrderBtn = document.getElementById("placeOrder");
 
+// ===============================
+// RENDER PRODUCTS
+// ===============================
 function renderProducts() {
-  if (!productsContainer) return;
-  productsContainer.innerHTML = "";
-  products.forEach((product, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${product.name} - R${product.price}</span>
-      <button class="edit" data-index="${index}">Edit</button>
-      <button class="delete" data-index="${index}">Delete</button>
-    `;
-    productsContainer.appendChild(li);
-  });
+  grid.innerHTML = "";
 
-  document.querySelectorAll(".delete").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idx = e.target.dataset.index;
-      products.splice(idx, 1);
-      saveAndRender();
-    });
-  });
-
-  document.querySelectorAll(".edit").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idx = e.target.dataset.index;
-      document.getElementById("productName").value = products[idx].name;
-      document.getElementById("productDesc").value = products[idx].desc;
-      document.getElementById("productPrice").value = products[idx].price;
-      document.getElementById("productImage").value = products[idx].image;
-      products.splice(idx, 1);
-      saveAndRender();
-    });
-  });
-}
-
-function saveAndRender() {
-  localStorage.setItem("products", JSON.stringify(products));
-  renderProducts();
-}
-
-if (addButton) {
-  addButton.addEventListener("click", () => {
-    const name = document.getElementById("productName").value.trim();
-    const desc = document.getElementById("productDesc").value.trim();
-    const price = parseFloat(document.getElementById("productPrice").value);
-    const image = document.getElementById("productImage").value.trim();
-
-    if (!name || !desc || isNaN(price) || !image) {
-      alert("Please fill in all fields correctly.");
-      return;
-    }
-
-    products.push({ name, desc, price, image });
-    saveAndRender();
-
-    document.getElementById("productName").value = "";
-    document.getElementById("productDesc").value = "";
-    document.getElementById("productPrice").value = "";
-    document.getElementById("productImage").value = "";
-  });
-}
-
-// Display Products on index.html
-const productsGrid = document.getElementById("products");
-if (productsGrid) {
   products.forEach(product => {
-    const div = document.createElement("div");
-    div.className = "product-card";
-    div.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
       <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>R${product.price}</p>
+      <div class="card-body">
+        <h3>${product.name}</h3>
+        <p>R ${Number(product.price)}</p>
+      </div>
     `;
-    productsGrid.appendChild(div);
+
+    card.addEventListener("click", () => openModal(product));
+    grid.appendChild(card);
   });
 }
+
+// ===============================
+// MODAL
+// ===============================
+function openModal(product) {
+  modalName.textContent = product.name;
+  modalPrice.textContent = `Price: R ${Number(product.price)}`;
+  modalDesc.textContent = product.description;
+  modal.classList.remove("hidden");
+}
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+// Close modal when clicking background
+modal.addEventListener("click", e => {
+  if (e.target === modal) {
+    modal.classList.add("hidden");
+  }
+});
+
+// ===============================
+// PLACE ORDER (TEMP)
+// ===============================
+placeOrderBtn.addEventListener("click", () => {
+  alert("Order captured. Next step: account & admin orders.");
+  modal.classList.add("hidden");
+});
+
+// ===============================
+// INIT
+// ===============================
+renderProducts();
