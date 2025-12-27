@@ -2,42 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin - MzansiBuy</title>
+  <title>Admin Dashboard - MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
 <header class="top">
-  <h1>Admin Panel</h1>
+  <h1>MzansiBuy Admin</h1>
+  <a href="#" class="admin-icon">
+    <i class="fa-solid fa-gear"></i>
+  </a>
 </header>
 
-<section class="admin-login">
-  <label>Enter Admin Password:</label>
-  <input type="password" id="adminPassword" placeholder="Password">
-  <button id="loginBtn">Login</button>
-  <p id="loginError" style="color:red;"></p>
-</section>
+<main class="admin-dashboard">
+  <div class="product-form">
+    <h2>Add / Edit Product</h2>
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="text" id="productDesc" placeholder="Description">
+    <input type="number" id="productPrice" placeholder="Price">
+    <input type="text" id="productImage" placeholder="Image URL">
+    <button id="addProduct">Add / Update Product</button>
+  </div>
 
-<section class="admin-controls" style="display:none;">
-  <h2>Manage Products</h2>
-  <label>Product Name:</label>
-  <input type="text" id="productName" placeholder="Name">
-
-  <label>Description:</label>
-  <input type="text" id="productDesc" placeholder="Description">
-
-  <label>Price:</label>
-  <input type="number" id="productPrice" placeholder="Price">
-
-  <label>Image URL:</label>
-  <input type="text" id="productImg" placeholder="Image URL">
-
-  <button id="addProduct">Add Product</button>
-
-  <h3>Existing Products</h3>
-  <div id="productList"></div>
-</section>
+  <div class="product-list">
+    <h2>Products</h2>
+    <ul id="productsContainer"></ul>
+  </div>
+</main>
 
 <script type="module" src="app.js"></script>
 </body>
