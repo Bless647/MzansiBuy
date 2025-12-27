@@ -4,49 +4,41 @@
   <meta charset="UTF-8">
   <title>MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ICONS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- STYLES -->
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <header class="top">
-  <h1 class="logo">MzansiBuy</h1>
-
-  <a href="admin.html" class="admin-icon" title="Admin">
+  <h1>MzansiBuy</h1>
+  <a href="admin.html" class="admin-icon">
     <i class="fa-solid fa-user-gear"></i>
   </a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<!-- ORDER MODAL (HIDDEN BY DEFAULT — VERY IMPORTANT) -->
-<div id="orderModal" class="modal hidden">
+<!-- Order Modal -->
+<div id="orderModal" class="modal">
   <div class="modal-content">
-    <button id="closeOrderModal" class="close-btn">&times;</button>
-
+    <span id="closeOrderModal" class="close">&times;</span>
     <h2 id="modalProductName"></h2>
     <p id="modalProductPrice"></p>
     <p id="modalProductDesc"></p>
 
-    <label>Your Name</label>
+    <label>Your Name:</label>
     <input type="text" id="customerName" placeholder="Enter your name">
 
-    <label>Payment Method</label>
+    <label>Payment Method:</label>
     <select id="paymentMethod">
       <option value="Cash">Cash</option>
       <option value="Card">Card</option>
     </select>
 
-    <button id="placeOrder" class="primary-btn">
-      Place Order
-    </button>
+    <button id="placeOrder">Place Order</button>
   </div>
 </div>
 
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
