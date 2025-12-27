@@ -5,32 +5,25 @@
   <title>MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Main Styles -->
+  <!-- ICONS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- STYLES -->
   <link rel="stylesheet" href="main.css">
-
-  <!-- Icons -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
 
-<!-- HEADER -->
 <header class="top">
   <h1 class="logo">MzansiBuy</h1>
 
-  <!-- ADMIN ICON -->
-  <a href="admin.html" class="admin-icon" title="Admin Login">
+  <a href="admin.html" class="admin-icon" title="Admin">
     <i class="fa-solid fa-user-gear"></i>
   </a>
 </header>
 
-<!-- PRODUCTS GRID -->
-<main id="products" class="grid">
-  <!-- Products will be injected by app.js -->
-</main>
+<main id="products" class="grid"></main>
 
-<!-- ORDER MODAL (HIDDEN BY DEFAULT) -->
+<!-- ORDER MODAL (HIDDEN BY DEFAULT — VERY IMPORTANT) -->
 <div id="orderModal" class="modal hidden">
   <div class="modal-content">
     <button id="closeOrderModal" class="close-btn">&times;</button>
@@ -54,8 +47,6 @@
   </div>
 </div>
 
-<!-- SCRIPT -->
-<script type="module" src="app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
