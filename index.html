@@ -19,13 +19,23 @@
 <main id="products" class="grid"></main>
 
 <!-- Product Modal -->
-<div id="productModal" class="modal">
+<div id="orderModal" class="modal">
   <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <img id="modalImage" src="" alt="Product Image">
-    <h2 id="modalName"></h2>
-    <p id="modalPrice"></p>
-    <p id="modalDesc"></p>
+    <span id="closeOrderModal" class="close">&times;</span>
+    <h2 id="modalProductName"></h2>
+    <p id="modalProductPrice"></p>
+    <p id="modalProductDesc"></p>
+
+    <label>Your Name:</label>
+    <input type="text" id="customerName" placeholder="Enter your name">
+
+    <label>Payment Method:</label>
+    <select id="paymentMethod">
+      <option value="Cash">Cash</option>
+      <option value="Card">Card</option>
+    </select>
+
+    <button id="placeOrder">Place Order</button>
   </div>
 </div>
 
