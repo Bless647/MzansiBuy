@@ -16,7 +16,7 @@ const placeOrderBtn = document.getElementById('placeOrder');
 
 let products = JSON.parse(localStorage.getItem('products')) || [];
 
-// --- Functions to display products ---
+// --- Render Products ---
 function renderProducts() {
   if(productsContainer){
     productsContainer.innerHTML = '';
@@ -28,7 +28,7 @@ function renderProducts() {
         <h3>${p.name}</h3>
         <p>${p.price}</p>
       `;
-      card.addEventListener('click', () => openOrderModal(p));
+      card.addEventListener('click', () => openOrderModal(p)); // only trigger on click
       productsContainer.appendChild(card);
     });
   }
@@ -47,6 +47,7 @@ function renderProducts() {
       `;
       adminContainer.appendChild(card);
     });
+
     document.querySelectorAll('.delete').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = e.target.dataset.id;
@@ -54,6 +55,7 @@ function renderProducts() {
         saveAndRender();
       });
     });
+
     document.querySelectorAll('.edit').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const id = e.target.dataset.id;
@@ -71,7 +73,8 @@ function renderProducts() {
 
 // --- Admin Password Login ---
 if(loginAdminBtn){
-  loginAdminBtn.addEventListener('click', () => {
+  loginAdminBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // prevents form freeze/reload
     if(adminPasswordInput.value === 'admin123'){
       passwordModal.style.display = 'none';
       adminContent.style.display = 'block';
