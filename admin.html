@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel</title>
+  <title>Admin - MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<div class="modal-content" style="max-width:520px;margin:40px auto;">
-  <h2>Admin Login</h2>
+<header class="top">
+  <h1>Admin Panel</h1>
+</header>
 
-  <input type="password" id="adminPass" placeholder="Enter admin password">
-  <button class="primary-btn" onclick="login()">Login</button>
+<div class="admin-login">
+  <label>Password:</label>
+  <input type="password" id="adminPassword" placeholder="Enter admin password">
+  <button id="loginBtn">Login</button>
 </div>
 
-<div id="adminPanel" class="hidden" style="padding:30px;max-width:900px;margin:auto;">
-  <h2>Manage Products</h2>
+<div id="adminPanel" style="display:none;">
+  <h2>Add New Product</h2>
+  <input type="text" id="prodName" placeholder="Product Name">
+  <input type="text" id="prodPrice" placeholder="Product Price">
+  <input type="text" id="prodDesc" placeholder="Product Description">
+  <input type="text" id="prodImage" placeholder="Image URL">
+  <button id="addProductBtn">Add Product</button>
 
-  <div class="card" style="padding:20px;margin-bottom:30px;">
-    <input id="name" placeholder="Product name">
-    <input id="price" type="number" placeholder="Price">
-    <input id="image" placeholder="Image URL">
-    <input id="desc" placeholder="Description">
-
-    <button class="primary-btn" onclick="addProduct()">Add Product</button>
-  </div>
-
-  <div id="adminProducts" class="grid"></div>
+  <h2>Existing Products</h2>
+  <div id="adminProductsList"></div>
 </div>
 
-<script src="admin.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
