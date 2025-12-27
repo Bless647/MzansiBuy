@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard - MzansiBuy</title>
+  <title>Admin Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
-<header class="top">
-  <h1>MzansiBuy Admin</h1>
-  <a href="#" class="admin-icon">
-    <i class="fa-solid fa-gear"></i>
-  </a>
-</header>
+<div class="modal-content" style="max-width:520px;margin:40px auto;">
+  <h2>Admin Login</h2>
 
-<main class="admin-dashboard">
-  <div class="product-form">
-    <h2>Add / Edit Product</h2>
-    <input type="text" id="productName" placeholder="Product Name">
-    <input type="text" id="productDesc" placeholder="Description">
-    <input type="number" id="productPrice" placeholder="Price">
-    <input type="text" id="productImage" placeholder="Image URL">
-    <button id="addProduct">Add / Update Product</button>
+  <input type="password" id="adminPass" placeholder="Enter admin password">
+  <button class="primary-btn" onclick="login()">Login</button>
+</div>
+
+<div id="adminPanel" class="hidden" style="padding:30px;max-width:900px;margin:auto;">
+  <h2>Manage Products</h2>
+
+  <div class="card" style="padding:20px;margin-bottom:30px;">
+    <input id="name" placeholder="Product name">
+    <input id="price" type="number" placeholder="Price">
+    <input id="image" placeholder="Image URL">
+    <input id="desc" placeholder="Description">
+
+    <button class="primary-btn" onclick="addProduct()">Add Product</button>
   </div>
 
-  <div class="product-list">
-    <h2>Products</h2>
-    <ul id="productsContainer"></ul>
-  </div>
-</main>
+  <div id="adminProducts" class="grid"></div>
+</div>
 
-<script type="module" src="app.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
