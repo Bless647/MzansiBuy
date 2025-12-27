@@ -1,7 +1,5 @@
-
-// Import Firebase (if you set it up later)
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFRoLLaeGoaPQHwTgt_frBDG90PQ03vZU",
@@ -16,65 +14,70 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Example local products array (if Firebase not used yet)
-let products = [
-  // Will be overwritten by admin uploads
-];
+const productsContainer = document.getElementById("products");
+const orderModal = document.getElementById("orderModal");
+const closeOrderModal = document.getElementById("closeOrderModal");
 
-// DOM elements
-const productsContainer = document.getElementById('products');
-const orderModal = document.getElementById('orderModal');
-const closeOrderModal = document.getElementById('closeOrderModal');
-const modalProductName = document.getElementById('modalProductName');
-const modalProductPrice = document.getElementById('modalProductPrice');
-const modalProductDesc = document.getElementById('modalProductDesc');
-const customerNameInput = document.getElementById('customerName');
-const paymentMethodSelect = document.getElementById('paymentMethod');
-const placeOrderBtn = document.getElementById('placeOrder');
+const modalProductName = document.getElementById("modalProductName");
+const modalProductPrice = document.getElementById("modalProductPrice");
+const modalProductDesc = document.getElementById("modalProductDesc");
+const modalProductImage = document.getElementById("modalProductImage");
 
-let currentProduct = null;
+const customerNameInput = document.getElementById("customerName");
+const paymentMethodSelect = document.getElementById("paymentMethod");
+const placeOrderBtn = document.getElementById("placeOrder");
 
-// Load products from Firebase or local storage
+let products = [];
+
+// Load products from admin.js array or Firebase
 async function loadProducts() {
   // If using Firebase uncomment below
   /*
-  const productsSnapshot = await getDocs(collection(db, "products"));
-  products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await getDocs(collection(db, "products"));
+  products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   */
   
+  // TEMP: Example admin products
+  products = window.adminProducts || []; 
+
   renderProducts();
 }
 
-// Render products to grid
 function renderProducts() {
-  productsContainer.innerHTML = '';
+  productsContainer.innerHTML = "";
   products.forEach((product, index) => {
-    const card = document.createElement('div');
-    card.className = 'product-card';
+    const card = document.createElement("div");
+    card.className = "product-card";
     card.innerHTML = `
       <img src="${product.image}" alt="${product.name}" />
       <h3>${product.name}</h3>
       <p>R${product.price}</p>
     `;
-    card.addEventListener('click', () => openOrderModal(product));
+
+    card.onclick = () => openOrderModal(index);
+
     productsContainer.appendChild(card);
   });
 }
 
-// Open modal
-function openOrderModal(product) {
-  currentProduct = product;
+function openOrderModal(index) {
+  const product = products[index];
   modalProductName.textContent = product.name;
   modalProductPrice.textContent = `R${product.price}`;
-  modalProductDesc.textContent = product.description || '';
-  customerNameInput.value = '';
-  paymentMethodSelect.value = 'Cash';
-  orderModal.style.display = 'block';
+  modalProductDesc.textContent = product.description || "";
+  modalProductImage.src = product.image;
+
+  orderModal.style.display = "block";
 }
 
-// Close modal
 closeOrderModal.onclick = () => {
-  orderModal.style.display = 'none';
+  orderModal.style.display = "none";
+};
+
+window.onclick = (event) => {
+  if (event.target === orderModal) {
+    orderModal.style.display = "none";
+  }
 };
 
 // Place order
@@ -83,22 +86,16 @@ placeOrderBtn.onclick = () => {
   const paymentMethod = paymentMethodSelect.value;
 
   if (!customerName) {
-    alert("Please enter your name");
+    alert("Please enter your name!");
     return;
   }
 
-  alert(`Order placed!\nProduct: ${currentProduct.name}\nPrice: R${currentProduct.price}\nCustomer: ${customerName}\nPayment: ${paymentMethod}`);
-  orderModal.style.display = 'none';
+  alert(`Order placed!\nName: ${customerName}\nPayment: ${paymentMethod}\nProduct: ${modalProductName.textContent}`);
 
-  // TODO: send order data to Firebase if needed
+  customerNameInput.value = "";
+  orderModal.style.display = "none";
+
+  // TODO: send to Firebase orders collection
 };
 
-// Close modal if click outside
-window.onclick = (e) => {
-  if (e.target === orderModal) {
-    orderModal.style.display = 'none';
-  }
-};
-
-// Initialize
 loadProducts();
