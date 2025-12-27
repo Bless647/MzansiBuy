@@ -5,13 +5,13 @@
   <title>MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <header class="top">
   <h1>MzansiBuy</h1>
-  <a href="admin.html" class="admin-icon">
+  <a href="#" class="admin-icon" id="goAdmin">
     <i class="fa-solid fa-gear"></i>
   </a>
 </header>
@@ -40,5 +40,20 @@
 </div>
 
 <script type="module" src="app.js"></script>
+
+<script>
+  // Admin selection popup
+  document.getElementById("goAdmin").addEventListener("click", () => {
+    const choice = prompt("Type 'admin' to log in as Admin, 'user' for User:");
+    if (choice && choice.toLowerCase() === "admin") {
+      window.location.href = "admin.html";
+    } else if (choice && choice.toLowerCase() === "user") {
+      alert("You are already on the User page.");
+    } else {
+      alert("Invalid selection.");
+    }
+  });
+</script>
+
 </body>
 </html>
