@@ -1,10 +1,28 @@
-const productsContainer = document.getElementById('products');
-const adminContainer = document.getElementById('adminProducts');
-const adminContent = document.getElementById('adminContent');
-const passwordModal = document.getElementById('passwordModal');
-const loginAdminBtn = document.getElementById('loginAdmin');
-const adminPasswordInput = document.getElementById('adminPassword');
 
+// Import Firebase (if you set it up later)
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAFRoLLaeGoaPQHwTgt_frBDG90PQ03vZU",
+  authDomain: "mzansibuy-da2ec.firebaseapp.com",
+  projectId: "mzansibuy-da2ec",
+  storageBucket: "mzansibuy-da2ec.firebasestorage.app",
+  messagingSenderId: "960056695104",
+  appId: "1:960056695104:web:0aaaf222abaf0ceebe42a5",
+  measurementId: "G-BZLD0M13GH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Example local products array (if Firebase not used yet)
+let products = [
+  // Will be overwritten by admin uploads
+];
+
+// DOM elements
+const productsContainer = document.getElementById('products');
 const orderModal = document.getElementById('orderModal');
 const closeOrderModal = document.getElementById('closeOrderModal');
 const modalProductName = document.getElementById('modalProductName');
@@ -14,123 +32,73 @@ const customerNameInput = document.getElementById('customerName');
 const paymentMethodSelect = document.getElementById('paymentMethod');
 const placeOrderBtn = document.getElementById('placeOrder');
 
-let products = JSON.parse(localStorage.getItem('products')) || [];
+let currentProduct = null;
 
-// --- Render Products ---
-function renderProducts() {
-  if(productsContainer){
-    productsContainer.innerHTML = '';
-    products.forEach((p, idx) => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p>${p.price}</p>
-      `;
-      card.addEventListener('click', () => openOrderModal(p)); // only trigger on click
-      productsContainer.appendChild(card);
-    });
-  }
-
-  if(adminContainer){
-    adminContainer.innerHTML = '';
-    products.forEach((p, idx) => {
-      const card = document.createElement('div');
-      card.className = 'product-card admin';
-      card.innerHTML = `
-        <h3>${p.name}</h3>
-        <p>${p.price}</p>
-        <p>${p.desc}</p>
-        <button class="edit" data-id="${idx}">Edit</button>
-        <button class="delete" data-id="${idx}">Delete</button>
-      `;
-      adminContainer.appendChild(card);
-    });
-
-    document.querySelectorAll('.delete').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = e.target.dataset.id;
-        products.splice(id, 1);
-        saveAndRender();
-      });
-    });
-
-    document.querySelectorAll('.edit').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = e.target.dataset.id;
-        const p = products[id];
-        document.getElementById('productName').value = p.name;
-        document.getElementById('productDesc').value = p.desc;
-        document.getElementById('productPrice').value = p.price;
-        document.getElementById('productImg').value = p.img;
-        products.splice(id, 1);
-        saveAndRender();
-      });
-    });
-  }
-}
-
-// --- Admin Password Login ---
-if(loginAdminBtn){
-  loginAdminBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // prevents form freeze/reload
-    if(adminPasswordInput.value === 'admin123'){
-      passwordModal.style.display = 'none';
-      adminContent.style.display = 'block';
-    } else {
-      alert('Wrong Password');
-    }
-  });
-}
-
-// --- Add Product ---
-const addProductBtn = document.getElementById('addProduct');
-if(addProductBtn){
-  addProductBtn.addEventListener('click', () => {
-    const name = document.getElementById('productName').value;
-    const desc = document.getElementById('productDesc').value;
-    const price = document.getElementById('productPrice').value;
-    const img = document.getElementById('productImg').value;
-    if(name && desc && price && img){
-      products.push({name, desc, price, img});
-      saveAndRender();
-      document.getElementById('productName').value = '';
-      document.getElementById('productDesc').value = '';
-      document.getElementById('productPrice').value = '';
-      document.getElementById('productImg').value = '';
-    } else alert('Fill all fields!');
-  });
-}
-
-// --- Save and Render ---
-function saveAndRender(){
-  localStorage.setItem('products', JSON.stringify(products));
+// Load products from Firebase or local storage
+async function loadProducts() {
+  // If using Firebase uncomment below
+  /*
+  const productsSnapshot = await getDocs(collection(db, "products"));
+  products = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  */
+  
   renderProducts();
 }
 
-// --- Order Modal ---
-function openOrderModal(p){
-  modalProductName.innerText = p.name;
-  modalProductPrice.innerText = p.price;
-  modalProductDesc.innerText = p.desc;
-  orderModal.style.display = 'block';
-}
-
-if(closeOrderModal){
-  closeOrderModal.onclick = () => { orderModal.style.display = 'none'; };
-}
-
-if(placeOrderBtn){
-  placeOrderBtn.addEventListener('click', () => {
-    const customerName = customerNameInput.value;
-    const payment = paymentMethodSelect.value;
-    if(!customerName) return alert('Enter your name');
-    alert(`Order placed!\nName: ${customerName}\nProduct: ${modalProductName.innerText}\nPrice: ${modalProductPrice.innerText}\nPayment: ${payment}`);
-    orderModal.style.display = 'none';
-    customerNameInput.value = '';
+// Render products to grid
+function renderProducts() {
+  productsContainer.innerHTML = '';
+  products.forEach((product, index) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p>R${product.price}</p>
+    `;
+    card.addEventListener('click', () => openOrderModal(product));
+    productsContainer.appendChild(card);
   });
 }
 
-// --- Initial Render ---
-renderProducts();
+// Open modal
+function openOrderModal(product) {
+  currentProduct = product;
+  modalProductName.textContent = product.name;
+  modalProductPrice.textContent = `R${product.price}`;
+  modalProductDesc.textContent = product.description || '';
+  customerNameInput.value = '';
+  paymentMethodSelect.value = 'Cash';
+  orderModal.style.display = 'block';
+}
+
+// Close modal
+closeOrderModal.onclick = () => {
+  orderModal.style.display = 'none';
+};
+
+// Place order
+placeOrderBtn.onclick = () => {
+  const customerName = customerNameInput.value.trim();
+  const paymentMethod = paymentMethodSelect.value;
+
+  if (!customerName) {
+    alert("Please enter your name");
+    return;
+  }
+
+  alert(`Order placed!\nProduct: ${currentProduct.name}\nPrice: R${currentProduct.price}\nCustomer: ${customerName}\nPayment: ${paymentMethod}`);
+  orderModal.style.display = 'none';
+
+  // TODO: send order data to Firebase if needed
+};
+
+// Close modal if click outside
+window.onclick = (e) => {
+  if (e.target === orderModal) {
+    orderModal.style.display = 'none';
+  }
+};
+
+// Initialize
+loadProducts();
