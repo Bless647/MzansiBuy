@@ -2,32 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel - MzansiBuy</title>
+  <title>Admin Dashboard - MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
 <header class="top">
-  <h1>Admin Panel</h1>
+  <h1>MzansiBuy Admin</h1>
+  <a href="index.html" class="back-icon">
+    <i class="fa-solid fa-arrow-left"></i> Back
+  </a>
 </header>
 
-<div id="loginSection">
-  <h2>Enter Password</h2>
-  <input type="password" id="adminPassword" placeholder="Password">
-  <button id="loginBtn">Login</button>
-  <p id="loginError" class="error"></p>
-</div>
+<main>
+  <!-- Password Modal -->
+  <div id="passwordModal" class="modal show">
+    <div class="modal-content">
+      <h2>Enter Admin Password</h2>
+      <input type="password" id="adminPasswordInput" placeholder="Password">
+      <button id="submitAdminPassword">Enter</button>
+      <p id="passwordError" class="error"></p>
+    </div>
+  </div>
 
-<div id="adminSection" style="display:none;">
-  <h2>Manage Products</h2>
-  <input type="text" id="productName" placeholder="Product Name">
-  <input type="number" id="productPrice" placeholder="Price">
-  <textarea id="productDesc" placeholder="Description"></textarea>
-  <input type="file" id="productImage">
-  <button id="addProductBtn">Add Product</button>
-  <div id="adminProducts" class="grid"></div>
-</div>
+  <!-- Dashboard -->
+  <div id="adminDashboard" class="hidden">
+    <section id="addProductSection">
+      <h2>Add New Product</h2>
+      <input type="text" id="productName" placeholder="Product Name">
+      <input type="text" id="productDesc" placeholder="Description">
+      <input type="number" id="productPrice" placeholder="Price">
+      <input type="text" id="productImage" placeholder="Image URL">
+      <button id="addProductBtn">Add Product</button>
+    </section>
+
+    <section id="productListSection">
+      <h2>Products</h2>
+      <div id="productList" class="grid"></div>
+    </section>
+  </div>
+</main>
 
 <script type="module" src="app.js"></script>
 </body>
