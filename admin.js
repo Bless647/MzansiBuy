@@ -1,89 +1,38 @@
-const PASSWORD = "admin123";
-let editIndex = null;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
 
-function login() {
-  const pass = document.getElementById("adminPass").value;
-  if (pass === PASSWORD) {
-    document.querySelector(".modal-content").style.display = "none";
-    document.getElementById("adminPanel").classList.remove("hidden");
-    renderAdminProducts();
-  } else {
-    alert("Wrong password");
-  }
-}
+<header class="top">
+  <h1>Admin Dashboard</h1>
+</header>
 
-function getProducts() {
-  return JSON.parse(localStorage.getItem("products")) || [];
-}
+<!-- Password Modal -->
+<div id="passwordModal" class="modal">
+  <div class="modal-content">
+    <h2>Enter Admin Password</h2>
+    <input type="password" id="adminPassword" placeholder="Password">
+    <button id="loginAdmin">Login</button>
+  </div>
+</div>
 
-function saveProducts(products) {
-  localStorage.setItem("products", JSON.stringify(products));
-}
+<main id="adminContent" style="display:none;">
+  <div class="admin-controls">
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="text" id="productDesc" placeholder="Description">
+    <input type="number" id="productPrice" placeholder="Price">
+    <input type="text" id="productImg" placeholder="Image URL">
+    <button id="addProduct">Add Product</button>
+  </div>
+  <div id="adminProducts" class="grid"></div>
+</main>
 
-function addProduct() {
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const image = document.getElementById("image").value;
-  const desc = document.getElementById("desc").value;
-
-  if (!name || !price || !image) {
-    alert("Fill all fields");
-    return;
-  }
-
-  const products = getProducts();
-
-  if (editIndex !== null) {
-    products[editIndex] = { name, price, image, description: desc };
-    editIndex = null;
-  } else {
-    products.push({ name, price, image, description: desc });
-  }
-
-  saveProducts(products);
-  clearForm();
-  renderAdminProducts();
-}
-
-function clearForm() {
-  name.value = price.value = image.value = desc.value = "";
-}
-
-function renderAdminProducts() {
-  const container = document.getElementById("adminProducts");
-  container.innerHTML = "";
-
-  getProducts().forEach((p, i) => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${p.image}">
-      <div class="card-body">
-        <h3>${p.name}</h3>
-        <p>R ${p.price}</p>
-        <button onclick="editProduct(${i})">Edit</button>
-        <button onclick="deleteProduct(${i})">Delete</button>
-      </div>
-    `;
-
-    container.appendChild(card);
-  });
-}
-
-function editProduct(i) {
-  const p = getProducts()[i];
-  name.value = p.name;
-  price.value = p.price;
-  image.value = p.image;
-  desc.value = p.description;
-  editIndex = i;
-}
-
-function deleteProduct(i) {
-  if (!confirm("Delete product?")) return;
-  const products = getProducts();
-  products.splice(i, 1);
-  saveProducts(products);
-  renderAdminProducts();
-}
+<script type="module" src="app.js"></script>
+</body>
+</html>
