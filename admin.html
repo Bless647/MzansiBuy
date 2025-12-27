@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard - MzansiBuy</title>
+  <title>Admin - MzansiBuy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -11,40 +11,28 @@
 
 <header class="top">
   <h1>MzansiBuy Admin</h1>
-  <a href="index.html" class="back-icon">
-    <i class="fa-solid fa-arrow-left"></i> Back
-  </a>
+  <a href="index.html" class="back-icon"><i class="fa-solid fa-arrow-left"></i> Back</a>
 </header>
 
 <main>
-  <!-- Password Modal -->
-  <div id="passwordModal" class="modal show">
-    <div class="modal-content">
-      <h2>Enter Admin Password</h2>
-      <input type="password" id="adminPasswordInput" placeholder="Password">
-      <button id="submitAdminPassword">Enter</button>
-      <p id="passwordError" class="error"></p>
-    </div>
-  </div>
+  <h2>Login</h2>
+  <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+  <button id="loginBtn">Login</button>
 
-  <!-- Dashboard -->
-  <div id="adminDashboard" class="hidden">
-    <section id="addProductSection">
-      <h2>Add New Product</h2>
-      <input type="text" id="productName" placeholder="Product Name">
-      <input type="text" id="productDesc" placeholder="Description">
-      <input type="number" id="productPrice" placeholder="Price">
-      <input type="text" id="productImage" placeholder="Image URL">
-      <button id="addProductBtn">Add Product</button>
-    </section>
+  <div id="adminPanel" style="display:none;">
+    <h2>Products</h2>
+    <form id="productForm">
+      <input type="text" id="productName" placeholder="Product Name" required />
+      <input type="number" id="productPrice" placeholder="Price" required />
+      <input type="text" id="productImage" placeholder="Image URL" required />
+      <textarea id="productDesc" placeholder="Description"></textarea>
+      <button type="submit">Add Product</button>
+    </form>
 
-    <section id="productListSection">
-      <h2>Products</h2>
-      <div id="productList" class="grid"></div>
-    </section>
+    <div id="productList" class="grid"></div>
   </div>
 </main>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="admin.js"></script>
 </body>
 </html>
