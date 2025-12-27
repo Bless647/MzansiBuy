@@ -1,53 +1,81 @@
-const products = [
+// Example products array (will be replaced with Firebase later)
+let products = [
   {
-    name: "Bluetooth Speaker",
-    price: 499,
-    image: "https://images.unsplash.com/photo-1585386959984-a4155228fdb1",
-    description: "Portable high-quality sound speaker"
+    id: 1,
+    name: "Product 1",
+    price: 250,
+    image: "https://via.placeholder.com/150",
+    desc: "Description for product 1"
   },
   {
-    name: "Wireless Headphones",
-    price: 899,
-    image: "https://images.unsplash.com/photo-1518443881415-1f08dbd7b7ae",
-    description: "Noise cancelling headphones"
-  },
-  {
-    name: "Smart Watch",
-    price: 1299,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-    description: "Track fitness and notifications"
+    id: 2,
+    name: "Product 2",
+    price: 400,
+    image: "https://via.placeholder.com/150",
+    desc: "Description for product 2"
   }
 ];
 
-const grid = document.getElementById("products");
-const modal = document.getElementById("orderModal");
+const productsContainer = document.getElementById("products");
+const orderModal = document.getElementById("orderModal");
+const closeModal = document.getElementById("closeOrderModal");
+const modalProductName = document.getElementById("modalProductName");
+const modalProductPrice = document.getElementById("modalProductPrice");
+const modalProductDesc = document.getElementById("modalProductDesc");
+const customerNameInput = document.getElementById("customerName");
+const paymentSelect = document.getElementById("paymentMethod");
+const placeOrderBtn = document.getElementById("placeOrder");
 
-const modalName = document.getElementById("modalProductName");
-const modalPrice = document.getElementById("modalProductPrice");
-const modalDesc = document.getElementById("modalProductDesc");
+let selectedProduct = null;
 
-document.getElementById("closeOrderModal").onclick = () => {
-  modal.classList.add("hidden");
-};
-
-products.forEach(product => {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
-    <img src="${product.image}">
-    <div class="card-body">
+// Render products grid
+function renderProducts() {
+  productsContainer.innerHTML = "";
+  products.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
       <h3>${product.name}</h3>
       <p>R ${product.price}</p>
-    </div>
-  `;
+    `;
+    card.addEventListener("click", () => openModal(product));
+    productsContainer.appendChild(card);
+  });
+}
 
-  card.onclick = () => {
-    modalName.textContent = product.name;
-    modalPrice.textContent = `Price: R ${product.price}`;
-    modalDesc.textContent = product.description;
-    modal.classList.remove("hidden");
-  };
+// Open order modal
+function openModal(product) {
+  selectedProduct = product;
+  modalProductName.textContent = product.name;
+  modalProductPrice.textContent = `R ${product.price}`;
+  modalProductDesc.textContent = product.desc;
+  customerNameInput.value = "";
+  paymentSelect.value = "Cash";
+  orderModal.style.display = "block";
+}
 
-  grid.appendChild(card);
-});
+// Close modal
+closeModal.onclick = () => {
+  orderModal.style.display = "none";
+};
+
+// Place order
+placeOrderBtn.onclick = () => {
+  const customerName = customerNameInput.value.trim();
+  const paymentMethod = paymentSelect.value;
+
+  if (!customerName) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  const msg = `Hello, I want to order ${selectedProduct.name} costing R${selectedProduct.price}. Payment method: ${paymentMethod}. Name: ${customerName}`;
+  const phone = "27686816463"; // Your WhatsApp number
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+
+  orderModal.style.display = "none";
+};
+
+renderProducts();
