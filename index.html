@@ -11,49 +11,15 @@
 
 <header class="top">
   <h1>MzansiBuy</h1>
-  <a href="#" class="admin-icon" id="goAdmin">
-    <i class="fa-solid fa-gear"></i>
+
+  <!-- ADMIN ICON -->
+  <a href="role.html" class="admin-icon" title="Admin Access">
+    <i class="fa-solid fa-user-gear"></i>
   </a>
 </header>
 
 <main id="products" class="grid"></main>
 
-<!-- Order Modal -->
-<div id="orderModal" class="modal">
-  <div class="modal-content">
-    <span id="closeOrderModal" class="close">&times;</span>
-    <h2 id="modalProductName"></h2>
-    <p id="modalProductPrice"></p>
-    <p id="modalProductDesc"></p>
-
-    <label>Your Name:</label>
-    <input type="text" id="customerName" placeholder="Enter your name">
-
-    <label>Payment Method:</label>
-    <select id="paymentMethod">
-      <option value="Cash">Cash</option>
-      <option value="Card">Card</option>
-    </select>
-
-    <button id="placeOrder">Place Order</button>
-  </div>
-</div>
-
 <script type="module" src="app.js"></script>
-
-<script>
-  // Admin selection popup
-  document.getElementById("goAdmin").addEventListener("click", () => {
-    const choice = prompt("Type 'admin' to log in as Admin, 'user' for User:");
-    if (choice && choice.toLowerCase() === "admin") {
-      window.location.href = "admin.html";
-    } else if (choice && choice.toLowerCase() === "user") {
-      alert("You are already on the User page.");
-    } else {
-      alert("Invalid selection.");
-    }
-  });
-</script>
-
 </body>
 </html>
